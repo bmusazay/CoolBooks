@@ -28,9 +28,6 @@
 	} else {
 		out.println("Failed");
 	}
-
-
-
 %>
 </body>
 </html>
