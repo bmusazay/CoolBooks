@@ -24,7 +24,7 @@ public class UserDatabase {
 		return connPool;
 	}
 	
-	/*public User selectUser(String username){
+	public User selectUser(String email){
 		Statement stmt = null;
 		ResultSet rs = null;
 		User user = new User();
@@ -35,15 +35,13 @@ public class UserDatabase {
 			if(conn != null){
 				stmt = conn.createStatement();
 				
-				String strQuery = "select username, u_name, email, signUpDate, lastLogin from user "+
-						" where username = '"+username+"'";
+				String strQuery = "select email, first_name, last_name from account "+
+						" where email = '"+ email +"'";
 				rs = stmt.executeQuery(strQuery);
 				if(rs.next()){
-					user.setUsername(rs.getString(1));
-					user.setName(rs.getString(2));
-					user.setEmail(rs.getString(3));
-					user.setSignDate(rs.getString(4));
-					user.setLastDate(rs.getString(5));
+					user.setEmail(rs.getString(1));
+					user.setFName(rs.getString(2));
+					user.setLName(rs.getString(3));
 				}
 			}
 		}catch(SQLException e){
@@ -68,26 +66,32 @@ public class UserDatabase {
 		    }
 		}
 		return user;
-	}*/
+	}
 	
 	//insert a new user
-	
-	public int registerUser(User user){
+	public boolean registerUser(User user){
+		
 		Statement stmt = null;
 		ResultSet rs = null;
-		int resultNo = 0;
 		Connection conn = null;
+		
 		try{
 			conn = connPool.getConnection();
 			
 			if(conn != null){
 				stmt = conn.createStatement();
 				
-				String strQuery = "insert Account(email, first_name, last_name, pass) values ('" + user.getEmail() + 
+				String strQuery = "select email from Account where email = '"+ user.getEmail() +"'";
+				
+				rs = stmt.executeQuery(strQuery);
+				if(rs.next()){
+					return !rs.getString(1).equals(user.getEmail());
+				}
+				
+				strQuery = "insert Account(email, first_name, last_name, pass) values ('" + user.getEmail() + 
 						"', '" + user.getFName() +"', '" + user.getLName() + "', '" + user.getPass() + "')";
 						
-						
-				resultNo = stmt.executeUpdate(strQuery);
+				stmt.executeUpdate(strQuery);
 			}
 		}catch(SQLException e){
 			for(Throwable t: e){	
@@ -110,7 +114,7 @@ public class UserDatabase {
 		    	 System.err.println(e);
 		    }
 		}
-		return resultNo;
+		return false;
 	}
 	
 	public boolean verifyCredentials(User user)
@@ -125,7 +129,7 @@ public class UserDatabase {
 			if(conn != null){
 				stmt = conn.createStatement();
 				
-				String strQuery = "select pass from Account"+
+				String strQuery = "select pass from Account" +
 						" where email = '"+ user.getEmail() +"'";
 				rs = stmt.executeQuery(strQuery);
 				if(rs.next()){

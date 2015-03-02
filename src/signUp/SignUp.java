@@ -1,11 +1,16 @@
 package signUp;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import user.User;
 import data.dbConnect.*;
 
@@ -37,6 +42,12 @@ public class SignUp extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		Cookie[] cookies = request.getCookies();
+		for(int i = 0; i < cookies.length; i++) {
+			
+		}
+		
 		String email= request.getParameter("email");
 		String passwd= request.getParameter("pass");
 		String fname= request.getParameter("fname");
@@ -45,11 +56,12 @@ public class SignUp extends HttpServlet {
 		User user = new User(email, passwd, fname, lname);
 		UserDatabase dbConn = new UserDatabase();
 		
-		int i = dbConn.registerUser(user);
-		if(i > 0){
-				response.sendRedirect("../CoolBooks/test.html");
-		}else{
-			response.sendRedirect("test.html");
+		boolean registered = dbConn.registerUser(user);
+		if (registered) {
+			response.sendRedirect("../CoolBooks/loginForm.html");
+		} else {
+			ServletOutputStream out = response.getOutputStream();
+			out.println("<h1>Please select a different email<h1>");
 		}
 	}
 
