@@ -1,6 +1,7 @@
 package data.dbConnect;
 
 import java.sql.*;
+import java.util.*;
 import book.Book;
 
 import data.dbConnect.DBConnectionPool;
@@ -69,33 +70,36 @@ public class BookDatabase {
 		}
 		return curBook;
 	}
-	/*public User selectUser(String username){
+	
+	public ArrayList<Book> selectBooks(){
 		Statement stmt = null;
 		ResultSet rs = null;
-		User user = new User();
 		Connection conn = null;
+		ArrayList<Book> books = new ArrayList<>();
+		
 		try{
 			conn = connPool.getConnection();
 			
 			if(conn != null){
 				stmt = conn.createStatement();
 				
-				String strQuery = "select username, u_name, email, signUpDate, lastLogin from user "+
-						" where username = '"+username+"'";
+				String strQuery = "select isbn, title, author, price, category from book";
 				rs = stmt.executeQuery(strQuery);
-				if(rs.next()){
-					user.setUsername(rs.getString(1));
-					user.setName(rs.getString(2));
-					user.setEmail(rs.getString(3));
-					user.setSignDate(rs.getString(4));
-					user.setLastDate(rs.getString(5));
+				while(rs.next()){
+					Book book = new Book();
+					book.setIsbn(rs.getString(1));
+					book.setTitle(rs.getString(2));
+					book.setAuthor(rs.getString(3));
+					book.setPrice(Double.parseDouble(rs.getString(4)));
+					book.setCategory(rs.getString(5));
+					books.add(book);
 				}
 			}
 		}catch(SQLException e){
 			for(Throwable t: e){	
 				t.printStackTrace();
 			}
-		}catch (Exception et) {
+		} catch (Exception et) {
 			et.printStackTrace();
 		}finally {
 		    try {
@@ -112,8 +116,49 @@ public class BookDatabase {
 		    	 System.err.println(e);
 		    }
 		}
-		return user;
-	}*/
-	
+		return books;
+	}
+
+	public ArrayList<String> selectCategories(){
+		Statement stmt = null;
+		ResultSet rs = null;
+		Connection conn = null;
+		ArrayList<String> categories = new ArrayList<>();
+		
+		try{
+			conn = connPool.getConnection();
+			
+			if(conn != null){
+				stmt = conn.createStatement();
+				
+				String strQuery = "select distinct category from book";
+				rs = stmt.executeQuery(strQuery);
+				while(rs.next()){
+					categories.add((rs.getString(1)));
+				}
+			}
+		}catch(SQLException e){
+			for(Throwable t: e){	
+				t.printStackTrace();
+			}
+		} catch (Exception et) {
+			et.printStackTrace();
+		}finally {
+		    try {
+		    	if (rs != null){
+		            rs.close();
+		        }
+		    	if (stmt != null){
+		            stmt.close();
+		        }
+		        if (conn != null) {
+		            connPool.returnConnection(conn);
+		        }
+		    }catch(Exception e){
+		    	 System.err.println(e);
+		    }
+		}
+		return categories;
+	}
 }
 

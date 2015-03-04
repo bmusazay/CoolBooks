@@ -71,6 +71,7 @@ public class UserDatabase {
 	//insert a new user
 	public boolean registerUser(User user){
 		
+		boolean registered = false;
 		Statement stmt = null;
 		ResultSet rs = null;
 		Connection conn = null;
@@ -85,13 +86,15 @@ public class UserDatabase {
 				
 				rs = stmt.executeQuery(strQuery);
 				if(rs.next()){
-					return !rs.getString(1).equals(user.getEmail());
+					registered = !rs.getString(0).equals(user.getEmail());
 				}
 				
-				strQuery = "insert Account(email, first_name, last_name, pass) values ('" + user.getEmail() + 
-						"', '" + user.getFName() +"', '" + user.getLName() + "', '" + user.getPass() + "')";
-						
-				stmt.executeUpdate(strQuery);
+				if (registered) {
+					strQuery = "insert Account(email, first_name, last_name, pass) values ('" + user.getEmail() + 
+							"', '" + user.getFName() +"', '" + user.getLName() + "', '" + user.getPass() + "')";
+							
+					stmt.executeUpdate(strQuery);
+				}
 			}
 		}catch(SQLException e){
 			for(Throwable t: e){	
@@ -114,7 +117,7 @@ public class UserDatabase {
 		    	 System.err.println(e);
 		    }
 		}
-		return false;
+		return registered;
 	}
 	
 	public boolean verifyCredentials(User user)

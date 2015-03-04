@@ -14,7 +14,7 @@ public class DBConnectionPool {
 	public DBConnectionPool(String url) throws Exception{
 		this.url = url;
 		this.username = "root";
-		this.passwd = ""; 
+		this.passwd = "meow"; 
 		
 		Class.forName(driver);
 	}
