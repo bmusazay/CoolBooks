@@ -19,7 +19,7 @@
 	
 	Book book = bookDB.getBook(isbn);
 	
-	
+	session.setAttribute("bookInstance", book);
 	
 	
 	out.println("<h1> Product information: </h1>" );
@@ -37,8 +37,11 @@
 	
 	%>
 	
-	<form action="test.html" method="post">
-		<input type="submit" value="Add to Cart" id="submit"/>
+	
+	
+	
+	<form action="Purchase" method="post">
+		<input type="submit" value="Purchase" id="submit"/>
 	</form>
 	
 </body>

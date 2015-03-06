@@ -23,6 +23,41 @@ public class BookDatabase {
 		return connPool;
 	}
 	
+	public int purchaseBook(Book book, int quantity)
+	{
+		
+		Statement stmt = null;
+		int resultNo = 0;
+		Connection conn = null;
+		try{
+
+			conn = connPool.getConnection();
+			if(conn != null){
+				stmt = conn.createStatement();	
+				String strQuery = "update Book set inventory_amount = inventory_amount - 1" +
+						" where isbn = '"+ book.getIsbn() +"' and inventory_amount > 0"; 
+				resultNo = stmt.executeUpdate(strQuery);
+			}
+		}catch(SQLException e){
+			for(Throwable t: e){	
+				t.printStackTrace();
+			}
+		} catch (Exception et) {
+			et.printStackTrace();
+		}finally {
+		    try {
+		    	if (stmt != null){
+		            stmt.close();
+		        }
+		        if (conn != null) {
+		            connPool.returnConnection(conn);
+		        }
+		    }catch(Exception e){
+		    	 System.err.println(e);
+		    }
+		}
+		return resultNo;
+	}
 	public Book getBook(String isbn)
 	{
 		Book curBook = new Book();
@@ -160,5 +195,7 @@ public class BookDatabase {
 		}
 		return categories;
 	}
+	
+	
 }
 
