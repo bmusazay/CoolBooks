@@ -15,9 +15,7 @@
 
 <%
 		
-	Enumeration en = session.getAttributeNames();
-	String name = (String) en.nextElement();
-	String email = (String) session.getAttribute(name);
+	String email = (String) session.getAttribute("loginId");
 
 	UserDatabase userDB = new UserDatabase();
 	User tempUser = userDB.selectUser(email);

@@ -11,6 +11,8 @@ import javax.servlet.http.HttpSession;
 
 import book.Book;
 import data.dbConnect.*;
+import transaction.Transaction;
+import user.User;
 
 /**
  * Servlet implementation class Purchase
@@ -43,7 +45,12 @@ public class Purchase extends HttpServlet {
 		
 		//Book book = (Book)request.getAttribute("book");
 		HttpSession ses = request.getSession();
-		
+		User user = (User)ses.getAttribute("userInstance");
+		if (user == null)
+		{
+			//not logged in FIX
+			response.sendRedirect("../CoolBooks/test.html");
+		}
 		Book book = (Book)ses.getAttribute("bookInstance");
 		
 		if( book.getInventory() > 0)
@@ -51,6 +58,16 @@ public class Purchase extends HttpServlet {
 			BookDatabase db = new BookDatabase();
 			if (db.purchaseBook(book, 1) > 0) 
 			{
+				//Create transaction
+				Transaction tr = new Transaction(user.getEmail(), book.getIsbn(),
+													1, book.getPrice() );
+				
+				//Upload transaction object to TransactionDB
+				TransactionDB trDB = new TransactionDB(tr);
+				trDB.addTransaction(book);
+				tr.setTranNumber(trDB.getOrderNumber());
+				//Send transaction to confirmation page to display
+				ses.setAttribute("transaction", tr);
 				response.sendRedirect("../CoolBooks/Confirmation.jsp");
 			} else 
 			{

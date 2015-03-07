@@ -47,11 +47,15 @@ public class Login extends HttpServlet {
 		UserDatabase dbConn = new UserDatabase();
 		
 		HttpSession session = request.getSession();
+		
 		session.setAttribute("loginId", email);
 		session.setAttribute("logPw", pass);
 		
+		
 		if(dbConn.verifyCredentials(user))
 		{
+			//If login was successful, add User to the session
+			session.setAttribute("userInstance", user);
 			response.sendRedirect("../CoolBooks/accountPage.jsp");
 		} else 
 		{
