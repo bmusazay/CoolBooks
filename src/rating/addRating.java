@@ -1,4 +1,4 @@
-package purchase;
+package rating;
 
 import java.io.IOException;
 import java.util.Date;
@@ -8,24 +8,28 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import rating.Rating;
+
 import javax.servlet.http.HttpSession;
 
 import book.Book;
 import data.dbConnect.*;
-import transaction.Transaction;
 import user.User;
+import rating.Rating;
+
 
 /**
- * Servlet implementation class Purchase
+ * Servlet implementation class addRating
  */
-@WebServlet("/Purchase")
-public class Purchase extends HttpServlet {
+@WebServlet("/addRating")
+public class addRating extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Purchase() {
+    public addRating() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -43,46 +47,33 @@ public class Purchase extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		
-		//Book book = (Book)request.getAttribute("book");
 		HttpSession ses = request.getSession();
 		User user = (User)ses.getAttribute("userInstance");
 		if (user == null)
 		{
 			//not logged in FIX
 			response.sendRedirect("../CoolBooks/test.html");
-		}
-		Book book = (Book)ses.getAttribute("bookInstance");
+		} 
 		
-		if( book.getInventory() > 0)
+		else
 		{
-			BookDatabase db = new BookDatabase();
-			if (db.purchaseBook(book, 1) > 0) 
+			Date dt = new Date();
+			java.text.SimpleDateFormat sdf = 
+			     new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String reviewDate = sdf.format(dt);
+			Book book = (Book)ses.getAttribute("bookInstance");
+			int ratingValue = Integer.parseInt(request.getParameter("rating"));
+			String review = request.getParameter("review");
+			Rating rating = new Rating(user.getEmail(), book.getIsbn(), ratingValue, review, reviewDate);
+			RatingDB rDB = new RatingDB();
+			if (rDB.addRating(rating) > 0)
 			{
-				Date dt = new Date();
-				java.text.SimpleDateFormat sdf = 
-				     new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				String purchaseDate = sdf.format(dt);
-				
-				//Create transaction
-				Transaction tr = new Transaction(user.getEmail(), book.getIsbn(),
-													1, book.getPrice(), purchaseDate );
-				
-				//Upload transaction object to TransactionDB
-				TransactionDB trDB = new TransactionDB();
-				trDB.addTransaction(tr);
-				tr.setTranNumber(trDB.getOrderNumber(tr));
-				//Send transaction to confirmation page to display
-				ses.setAttribute("transaction", tr);
-				response.sendRedirect("../CoolBooks/Confirmation.jsp");
-			} else 
+				response.sendRedirect("../CoolBooks/Product.jsp?isbn=" + rating.getIsbn());
+			} else
 			{
-				// error page something went wrong
+				//duplicate rating
+				response.sendRedirect("../CoolBooks/test.html");
 			}
-			
-		} else 
-		{
-			//not in stock
 		}
 		
 	}

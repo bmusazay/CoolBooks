@@ -2,9 +2,7 @@ package data.dbConnect;
 
 
 import java.sql.*;
-import java.util.Date;
 
-import book.Book;
 import data.dbConnect.DBConnectionPool;
 import transaction.Transaction;
 
@@ -12,21 +10,9 @@ import transaction.Transaction;
 public class TransactionDB {
 	final static String db_url = "jdbc:mysql://localhost:3306/CoolBooksDB";
 	DBConnectionPool connPool = null;
-	private String email;
-	private String isbn;
-	private int quantity;
-	private double total;
-	private int orderNumber;
-	private String purchaseDate;
 	
-	public TransactionDB(Transaction tr){
+	public TransactionDB(){
 		this.connPool = setDBConnection();
-		this.email = tr.getEmail();
-		this.isbn = tr.getIsbn();
-		this.quantity = tr.getQuantity();
-		this.total = tr.getTotal();
-		orderNumber = 0;
-		purchaseDate = "";
 	}
 	
 	public DBConnectionPool setDBConnection(){
@@ -40,14 +26,8 @@ public class TransactionDB {
 	
 	//insert into Transactions(email, purchaseDate, isbn, quantity, total) 
 	//values ("test2@gmail.com", current_timestamp(), '22-22-2', 5, 12.32);
-	public int addTransaction(Book book)
+	public int addTransaction(Transaction tr)
 	{
-		Date dt = new java.util.Date();
-
-		java.text.SimpleDateFormat sdf = 
-		     new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-		purchaseDate = sdf.format(dt);
 		Statement stmt = null;
 		int resultNo = 0;
 		Connection conn = null;
@@ -57,8 +37,8 @@ public class TransactionDB {
 			if(conn != null){
 				stmt = conn.createStatement();	
 				String strQuery = "insert into Transactions(email, purchaseDate, isbn,"
-						+ "quantity, total) values ('" + this.email + "', '" + purchaseDate + "', "
-								+ "'" + this.isbn +"', " + this.quantity + ", " + this.total +");"; 
+						+ "quantity, total) values ('" + tr.getEmail() + "', '" + tr.getTranDate() + "', "
+								+ "'" + tr.getIsbn() +"', " + tr.getQuantity() + ", " + tr.getTotal() +");"; 
 				resultNo = stmt.executeUpdate(strQuery);
 			}
 		}catch(SQLException e){
@@ -82,8 +62,9 @@ public class TransactionDB {
 		return resultNo;
 	}
 	
-	public int getOrderNumber()
+	public int getOrderNumber(Transaction tr)
 	{
+		int orderNumber = 0;
 		Statement stmt = null;
 		ResultSet rs = null;
 		Connection conn = null;
@@ -92,7 +73,7 @@ public class TransactionDB {
 			if(conn != null){
 				stmt = conn.createStatement();		
 				String strQuery = "select orderNumber from Transactions" +
-						" where isbn = '"+isbn+"' and purchaseDate = '" + purchaseDate + "';";
+						" where isbn = '"+ tr.getIsbn() +"' and purchaseDate = '" + tr.getTranDate() + "';";
 				rs = stmt.executeQuery(strQuery);
 				if(rs.next()){
 					orderNumber = rs.getInt(1);
