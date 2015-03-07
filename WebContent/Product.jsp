@@ -44,5 +44,17 @@
 		<input type="submit" value="Purchase" id="submit"/>
 	</form>
 	
+	<form action="addRating" method="post">
+		<input type="radio" name="rating" value="1">
+		<input type="radio" name="rating" value="2">
+		<input type="radio" name="rating" value="3">
+		<input type="radio" name="rating" value="4">
+		<input type="radio" name="rating" value="5">
+		<br>
+		<textarea name="review" cols="25" rows="7"></textarea> 
+        <br />
+		<input type="submit" value="Add Review" id="submitReview"/>
+	</form>
+	
 </body>
 </html>

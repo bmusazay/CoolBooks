@@ -8,15 +8,17 @@ public class Transaction {
 	private String isbn;
 	private int quantity;
 	private double total;
+	private String transDate;
 	private int tranNumber;
 	
-	public Transaction(String email, String isbn, int quantity, double price)
+	public Transaction(String email, String isbn, int quantity, double price, String purchaseDate)
 	{
 		this.email = email;
 		this.isbn = isbn;
 		this.quantity = quantity;
 		this.total = (price * quantity);
 		this.tranNumber = 0;
+		this.transDate = purchaseDate;
 	}
 	
 	public String getEmail()
@@ -67,5 +69,15 @@ public class Transaction {
 	public int getTranNumber()
 	{
 		return this.tranNumber;
+	}
+	
+	public void setTranDate(String tranDate)
+	{
+		this.transDate = tranDate;
+	}
+
+	public String getTranDate()
+	{
+		return this.transDate;
 	}
 }
