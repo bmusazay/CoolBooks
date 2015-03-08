@@ -10,6 +10,8 @@ public class Rating implements Serializable {
 	private String review;
 	private String reviewDate;
 	
+	public Rating() {}
+	
 	public Rating(String email, String isbn, int rating, String review, String reviewDate)
 	{
 		this.email = email;

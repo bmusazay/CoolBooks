@@ -2,6 +2,7 @@ package data.dbConnect;
 
 
 import java.sql.*;
+import java.util.ArrayList;
 
 import data.dbConnect.DBConnectionPool;
 import transaction.Transaction;
@@ -103,4 +104,54 @@ public class TransactionDB {
 		return orderNumber;
 	}
 	
+	public ArrayList<Transaction> getTransactions(String email){
+		Statement stmt = null;
+		ResultSet rs = null;
+		Connection conn = null;
+		ArrayList<Transaction> transactions = new ArrayList<>();
+		
+		try{
+			conn = connPool.getConnection();
+			
+			if(conn != null){
+				stmt = conn.createStatement();
+				
+				String strQuery = "select orderNumber, purchaseDate, isbn, "
+						        + "quantity, total from transactions where email = '" + email + "';";
+				rs = stmt.executeQuery(strQuery);
+				while(rs.next()){
+					while(rs.next()){
+						Transaction transaction = new Transaction();
+						transaction.setTranNumber(Integer.parseInt(rs.getString(1)));
+						transaction.setTranDate(rs.getString(2));
+						transaction.setIsbn(rs.getString(3));
+						transaction.setQuantity(Integer.parseInt(rs.getString(4)));
+						transaction.setTotal(Double.parseDouble(rs.getString(5)));
+						transactions.add(transaction);
+					}
+				}
+			}
+		}catch(SQLException e){
+			for(Throwable t: e){	
+				t.printStackTrace();
+			}
+		} catch (Exception et) {
+			et.printStackTrace();
+		}finally {
+		    try {
+		    	if (rs != null){
+		            rs.close();
+		        }
+		    	if (stmt != null){
+		            stmt.close();
+		        }
+		        if (conn != null) {
+		            connPool.returnConnection(conn);
+		        }
+		    }catch(Exception e){
+		    	 System.err.println(e);
+		    }
+		}
+		return transactions;
+	}
 }
