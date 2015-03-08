@@ -14,6 +14,7 @@ import book.Book;
 import data.dbConnect.*;
 import transaction.Transaction;
 import user.User;
+import java.util.Date;
 
 /**
  * Servlet implementation class Purchase
@@ -62,9 +63,6 @@ public class Purchase extends HttpServlet {
 				BookDatabase db = new BookDatabase();
 				if (db.purchaseBook(book, 1) > 0) 
 				{
-					//Create transaction
-					Transaction tr = new Transaction(user.getEmail(), book.getIsbn(),
-														1, book.getPrice() );
 					Date dt = new Date();
 					java.text.SimpleDateFormat sdf = 
 					     new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -78,14 +76,6 @@ public class Purchase extends HttpServlet {
 					TransactionDB trDB = new TransactionDB();
 					trDB.addTransaction(tr);
 					tr.setTranNumber(trDB.getOrderNumber(tr));
-					//Create transaction
-					Transaction tr = new Transaction(user.getEmail(), book.getIsbn(),
-														1, book.getPrice(), purchaseDate );
-					
-					//Upload transaction object to TransactionDB
-					TransactionDB trDB = new TransactionDB(tr);
-					trDB.addTransaction(book);
-					tr.setTranNumber(trDB.getOrderNumber());
 
 					//Send transaction to confirmation page to display
 					ses.setAttribute("transaction", tr);
