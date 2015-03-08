@@ -12,7 +12,11 @@ public class Transaction {
 	private int tranNumber;
 	
 	public Transaction() {}
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> ahmed-branch
 	public Transaction(String email, String isbn, int quantity, double price, String purchaseDate)
 	{
 		this.email = email;

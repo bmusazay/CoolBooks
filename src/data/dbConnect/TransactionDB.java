@@ -104,7 +104,8 @@ public class TransactionDB {
 		return orderNumber;
 	}
 	
-	public ArrayList<Transaction> getTransactions(String email){
+
+	public ArrayList<Transaction> getTransactions(String email) {
 		Statement stmt = null;
 		ResultSet rs = null;
 		Connection conn = null;
@@ -120,16 +121,15 @@ public class TransactionDB {
 						        + "quantity, total from transactions where email = '" + email + "';";
 				rs = stmt.executeQuery(strQuery);
 				while(rs.next()){
-					while(rs.next()){
-						Transaction transaction = new Transaction();
-						transaction.setTranNumber(Integer.parseInt(rs.getString(1)));
-						transaction.setTranDate(rs.getString(2));
-						transaction.setIsbn(rs.getString(3));
-						transaction.setQuantity(Integer.parseInt(rs.getString(4)));
-						transaction.setTotal(Double.parseDouble(rs.getString(5)));
-						transactions.add(transaction);
-					}
+					Transaction transaction = new Transaction();
+					transaction.setTranNumber(Integer.parseInt(rs.getString(1)));
+					transaction.setTranDate(rs.getString(2));
+					transaction.setIsbn(rs.getString(3));
+					transaction.setQuantity(Integer.parseInt(rs.getString(4)));
+					transaction.setTotal(Double.parseDouble(rs.getString(5)));
+					transactions.add(transaction);
 				}
+			
 			}
 		}catch(SQLException e){
 			for(Throwable t: e){	
@@ -155,3 +155,21 @@ public class TransactionDB {
 		return transactions;
 	}
 }
+	
+	
+	/*
+	 * 2
+		o Maintain the aggregate sales and profit of the store weekly and monthly.
+		 Then, compare the value change (i.e. increase/decrease) of sales and profit 
+		 with the previous week and month. 
+		 o Maintain weekly the top 10 bestsellers of the entire store and the top 5
+		  bestsellers of each category. Also main the list of the most favorite books bi-‐‐weekly. 
+		 o Develop a direct marketing data; for each product category, a list of customers 
+		 that buy theproduct more than 2 times per month. 
+		 o Other interesting summary data that you will come up with. 
+	 * */
+	 
+	
+	
+
+

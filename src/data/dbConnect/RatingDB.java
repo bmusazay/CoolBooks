@@ -79,15 +79,13 @@ public class RatingDB {
 				
 				rs = stmt.executeQuery(strQuery);
 				while(rs.next()){
-					while(rs.next()){
-						Rating rating = new Rating();
-						rating.setIsbn(rs.getString(1));
-						rating.setRating(Integer.parseInt(rs.getString(2)));
-						rating.setReveiwDate(rs.getString(3));
-						rating.setReview(rs.getString(4));
-						ratings.add(rating);
-					}
-				}
+					Rating rating = new Rating();
+					rating.setIsbn(rs.getString(1));
+					rating.setRating(Integer.parseInt(rs.getString(2)));
+					rating.setReveiwDate(rs.getString(3));
+					rating.setReview(rs.getString(4));
+					ratings.add(rating);
+				}			
 			}
 		} catch(SQLException e){
 			for(Throwable t: e){	
@@ -113,3 +111,4 @@ public class RatingDB {
 		return ratings;
 	}
 }
+
