@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta charset="UTF-8">
@@ -86,6 +88,10 @@
 	
 		<h1>Login to your account</h1>
 		
+		<%if (session.getAttribute("success") != null && !(boolean)session.getAttribute("success")) {%>
+			<h2>Invalid username or password. Please try again.</h2>
+		<%}%>
+		
 		<div> 
 			<label> Email : </label>
 			<input type = "text"  name="email" id="email" required="required"/>
@@ -101,8 +107,6 @@
 		<a href="signUpForm.html" id="link"> Register an account </a>
 	
 	</form>
-
-
 </body>
 </html>
 </body>
