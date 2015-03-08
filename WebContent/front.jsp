@@ -7,8 +7,66 @@
 <%@ page import="java.util.*" %>
 
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
-<title>Insert title here</title>
-<link rel="stylesheet" href="css/c06.css"/>
+	<style type="text/css">
+	
+	body {
+	    background-color: #0099FF;
+	}
+	
+	form {
+
+	}
+	
+	h1 {
+		font-family: 'Verdana', 'Geneva', sans-serif;
+		color: #FFFFFF;
+	}
+	
+	input[type='text'], textarea {
+	  background-color: #99CCFF;
+	  color: #FFFFFF;
+	  font-family: 'Verdana', 'Geneva', sans-serif;
+	  font-size: 25px;
+	  padding: 4px 6px;
+	  border: 1px solid #FFFFFF;
+	  margin-bottom:5px;
+	  border-radius: 3px;
+	}
+	
+	input[type='submit'], a.add {
+	  background-color: #0000FF;
+	  color: #f3dad1;
+	  border: none;
+	  border-radius: 5px;
+	  padding: 8px 10px;
+	  float: right;
+	  margin-top: 2px;
+	  font-size: 18px;
+	  text-decoration: none;
+	  text-transform: uppercase;
+	}
+	
+	input[type='submit']:hover, a.add:hover {
+	  background-color: #0066FF;
+	  color: #f3dad1;
+	  cursor: pointer;
+	  top: 1px;
+	}
+	
+	select {
+	  background-color: #0000FF;
+	  color: #f3dad1;
+	  border: none;
+	  border-radius: 5px;
+	  padding: 8px 10px;
+	  font-size: 18px;
+	  text-decoration: none;
+	  text-transform: uppercase;
+	}
+	
+	</style>
+	
+	<title>Welcome to CoolBooks</title>
 </head>
 <body>
 <%
@@ -20,16 +78,7 @@ String search = request.getParameter("search");
 %>
 
 	<form action="Search" method="post">
-		<input type="submit" value="Search" id="submit"/>
-		<div> 
-			<input type="text"  name="search" id="search" 
-			  <%
-	  			if (search != null) {%>
-	  			value="<%=search%>"
-	  			<%}%>/>
-		</div>
-		
-		<div> 
+	
 		<select name="category">
 			<option value="all">All</option>
 			<%
@@ -44,7 +93,13 @@ String search = request.getParameter("search");
   			><%=categories.get(i)%></option>
 			<%}%>
 		</select>
-		</div>
+	
+		<input type="submit" value="Search" id="submit"/>
+			<input type="text"  name="search" id="search" 
+			  <%
+	  			if (search != null) {%>
+	  			value="<%=search%>"
+	  			<%}%>/>
 		
 	</form>
 		
