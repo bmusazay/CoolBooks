@@ -45,7 +45,7 @@ public class Login extends HttpServlet {
 		String pass = request.getParameter("pass");
 		
 		if (email != null && pass != null) {			
-			User user = new User(email, pass, "", "");
+			User user = new User(email, pass, "", "", false);
 			UserDatabase dbConn = new UserDatabase();
 			HttpSession session = request.getSession();
 		
