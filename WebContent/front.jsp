@@ -4,6 +4,7 @@
 
 <%@ page import="data.dbConnect.BookDatabase" %>
 <%@ page import="book.Book" %>
+<%@ page import="user.User" %>
 <%@ page import="java.util.*" %>
 
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
@@ -75,6 +76,14 @@ ArrayList<String> categories = bookDB.selectCategories();
 
 String category = request.getParameter("category");
 String search = request.getParameter("search");
+
+if (category == null) {
+	category = "all";
+}
+
+if (search == null) {
+	search = "";
+}
 %>
 
 	<form action="Search" method="post">
@@ -102,7 +111,6 @@ String search = request.getParameter("search");
 	  			<%}%>/>
 		
 	</form>
-		
 			<table>
 				<thead>
 					<tr>
@@ -130,5 +138,21 @@ for(int i = 0; i < books.size(); i++){
 %>
 				</tbody>
 			</table>
+		
+	<%if (session.getAttribute("userInstance") == null) {%>
+		<form action="loginForm.jsp" method="post">	
+			<input type="submit" value="Login" id="login"/>
+		</form>
+	<%} else {%>
+		<form action="Logout" method="post">	
+			<input type="submit" value="Logout" id="logout"/>
+		</form>
+		<%User user = (User)session.getAttribute("userInstance");
+		  String email = user.getEmail();%>
+		<form action="accountPage.jsp" method="post">	
+			<input type="submit" value="Logged in as <%=email%>" id="account"/>
+		</form>
+	<%}%>
+	
 </body>
 </html>
