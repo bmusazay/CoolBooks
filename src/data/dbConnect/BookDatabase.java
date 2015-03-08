@@ -195,7 +195,5 @@ public class BookDatabase {
 		}
 		return categories;
 	}
-	
-	
 }
 
