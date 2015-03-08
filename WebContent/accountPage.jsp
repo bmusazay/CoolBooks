@@ -19,9 +19,9 @@
 
 <%
 		
-	String email = (String) session.getAttribute("loginId");
+	User sessionUser = (User)session.getAttribute("userInstance");
 	UserDatabase userDB = new UserDatabase();
-	User tempUser = userDB.selectUser(email);
+	User tempUser = userDB.selectUser(sessionUser.getEmail());
 	out.println("<h1> Email:"+tempUser.getEmail()+"<h1>");
 	out.println("<h1> First Name:"+tempUser.getFName()+"<h1>");
 	out.println("<h1> Last Name:"+tempUser.getLName()+"<h1>");		

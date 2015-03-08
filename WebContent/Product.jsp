@@ -4,6 +4,7 @@
     
 <%@ page import="data.dbConnect.BookDatabase" %>
 <%@ page import="book.Book" %>
+<%@ page import="user.User" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -35,23 +36,31 @@
 	out.println("<p> Inventory: "+book.getInventory()+ "</p>");
 	out.println("<p> Publish year: "+book.getYear()+ "</p>");
 	out.println("<p> Price: $"+book.getPrice()+ "</p>");
-	%>
+
+	User user = (User)session.getAttribute("userInstance");
 	
-	<form action="Purchase" method="post">
-		<input type="submit" value="Purchase" id="submit"/>
-	</form>
-	
-	<form action="addRating" method="post">
-		<input type="radio" name="rating" value="1">
-		<input type="radio" name="rating" value="2">
-		<input type="radio" name="rating" value="3">
-		<input type="radio" name="rating" value="4">
-		<input type="radio" name="rating" value="5">
-		<br>
-		<textarea name="review" cols="25" rows="7"></textarea> 
-        <br />
-		<input type="submit" value="Add Review" id="submitReview"/>
-	</form>
-	
+	if (user == null) {%>
+		<form action="loginForm.jsp" method="post">	
+			<input type="submit" value="Login to buy and rate." id="login"/>
+		</form>
+	<%} else {%>
+		
+		<form action="Purchase" method="post">
+			<input type="submit" value="Purchase" id="submit"/>
+		</form>
+		
+		<form action="addRating" method="post">
+			<input type="radio" name="rating" value="1">
+			<input type="radio" name="rating" value="2">
+			<input type="radio" name="rating" value="3">
+			<input type="radio" name="rating" value="4">
+			<input type="radio" name="rating" value="5">
+			<br>
+			<textarea name="review" cols="25" rows="7"></textarea> 
+	        <br />
+			<input type="submit" value="Add Review" id="submitReview"/>
+		</form>
+	<%}%>
+		
 </body>
 </html>

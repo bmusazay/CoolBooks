@@ -1,7 +1,4 @@
-package login;
-
-import user.User;
-import data.dbConnect.*;
+package logout;
 
 import java.io.IOException;
 
@@ -13,16 +10,16 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- * Servlet implementation class Login
+ * Servlet implementation class Logout
  */
-@WebServlet("/Login")
-public class Login extends HttpServlet {
+@WebServlet("/Logout")
+public class Logout extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Login() {
+    public Logout() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -40,31 +37,13 @@ public class Login extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+
+		HttpSession session = request.getSession();
 		
-		String email = request.getParameter("email");
-		String pass = request.getParameter("pass");
-		
-		if (email != null && pass != null) {			
-			User user = new User(email, pass, "", "");
-			UserDatabase dbConn = new UserDatabase();
-			HttpSession session = request.getSession();
-		
-			if(dbConn.verifyCredentials(user))
-			{
-				session.setAttribute("success", true);
-				session.setAttribute("userInstance", user);
-				String referer = request.getHeader("referer");
-				System.out.println(referer);
-				if (!referer.equals("http://localhost:8080/CoolBooks/loginForm.jsp")) {
-					response.sendRedirect(request.getHeader("referer"));
-				} else {
-					response.sendRedirect("../CoolBooks/front.jsp");
-				}
-			} else 
-			{
-				session.setAttribute("success", false);
-				response.sendRedirect("../CoolBooks/loginForm.jsp");
-			}
+		if(session.getAttribute("userInstance") != null)
+		{
+			session.removeAttribute("userInstance");
 		}
+		response.sendRedirect("../CoolBooks/front.jsp");
 	}
 }
