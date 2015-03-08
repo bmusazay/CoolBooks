@@ -121,12 +121,14 @@ public class BookDatabase {
 				
 				String strQuery = "";
 				
-				if (category.equals("all")) {
+				if (category == null || category.equals("all")) {
 					strQuery = "select isbn, title, author, price, category from book "
-					        + "where title like '%" + search + "%';";
+					         + "where title like '%" + search + "%' or author like '%" + search + "%'"
+					         + "or isbn like '%" + search + "%';";
 				} else {
 					strQuery = "select isbn, title, author, price, category from book "
-					        + "where title like '%" + search + "%' and category = '" + category + "';";
+					         + "where (title like '%" + search + "%' or author like '%" + search + "%'"
+					         + "or isbn like '%" + search + "%') and category = '" + category + "';";
 				}
 				
 				rs = stmt.executeQuery(strQuery);
