@@ -69,7 +69,7 @@
 <%
 	RatingDB ratingDB = new RatingDB();
 	ArrayList<Rating> ratings = ratingDB.getRatings(tempUser.getEmail());
-	out.println("<h1>"+ ratings.size()+"</h1>");
+	
 	for(int i = 0; i < ratings.size(); i++){
 		out.println("<tr>");
 		out.println("<td>"+ratings.get(i).getReviewDate()+"</td>");
