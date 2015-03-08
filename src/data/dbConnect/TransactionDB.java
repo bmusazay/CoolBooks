@@ -4,6 +4,7 @@ package data.dbConnect;
 import java.sql.*;
 import java.util.ArrayList;
 
+import java.math.*;
 import data.dbConnect.DBConnectionPool;
 import transaction.Transaction;
 
@@ -167,6 +168,161 @@ public class TransactionDB {
 		 o Other interesting summary data that you will come up with. 
 	 * */
 	 
+	public double getSales(String period)
+	{
+		Boolean previousTotalFlag = false;
+		String dateFrom = "";
+		String dateTo = "";
+		if (period.equals("lastweek"))
+		{
+			previousTotalFlag = true;
+			dateFrom = "14";
+			dateTo = "7";
+		} else if(period.equals("lastmonth"))
+		{
+			previousTotalFlag = true;
+			dateFrom = "60";
+			dateTo = "30";
+		}
+		double total = 0.0;
+		
+		Statement stmt = null;
+		ResultSet rs = null;
+		Connection conn = null;
+		try{
+			conn = connPool.getConnection();
+			if(conn != null){
+				stmt = conn.createStatement();		
+				String strQuery;
+				if (previousTotalFlag)
+				{
+					strQuery= "select total from Transactions where purchaseDate BETWEEN " +
+							"date_sub( now( ) , INTERVAL " + dateFrom + " DAY ) AND " +
+							"date_sub( now( ) , INTERVAL " + dateTo + " DAY )";
+				} else 
+				{
+					strQuery= "select total from Transactions where purchaseDate BETWEEN " +
+							"date_sub( now( ) , INTERVAL " + period + " DAY ) AND NOW( )";
+				}
+				rs = stmt.executeQuery(strQuery);
+				while(rs.next()){
+					total += rs.getDouble(1);
+				}
+			}
+		}catch(SQLException e){
+			for(Throwable t: e){	
+				t.printStackTrace();
+			}
+		}catch (Exception et) {
+			et.printStackTrace();
+		}finally {
+		    try {
+		    	if (rs != null){
+		            rs.close();
+		        }
+		    	if (stmt != null){
+		            stmt.close();
+		        }
+		        if (conn != null) {
+		            connPool.returnConnection(conn);
+		        }
+		    }catch(Exception e){
+		    	 System.err.println(e);
+		    }
+		};
+		BigDecimal bd = new BigDecimal(total).setScale(2, RoundingMode.HALF_EVEN);
+		total = bd.doubleValue();
+		return total;
+	}
 	
+	//Top ten best sellers
+	public ArrayList<String> topTenBestSellers()
+	{
+		Statement stmt = null;
+		ResultSet rs = null;
+		Connection conn = null;
+		ArrayList<String> topTen = new ArrayList<>();
+		try{
+			conn = connPool.getConnection();
+			
+			if(conn != null){
+				stmt = conn.createStatement();
+				
+				String strQuery = "select isbn from (select isbn, COUNT(*) as count FROM" + 
+							"Transactions GROUP BY isbn ORDER BY count DESC) AS TopTen ORDER BY " +
+							"count DESC LIMIT 10;";
+				rs = stmt.executeQuery(strQuery);
+				while(rs.next()){
+					topTen.add(rs.getString(1));
+				}
+				
+			}
+		}catch(SQLException e){
+			for(Throwable t: e){	
+				t.printStackTrace();
+			}
+		} catch (Exception et) {
+			et.printStackTrace();
+		}finally {
+		    try {
+		    	if (rs != null){
+		            rs.close();
+		        }
+		    	if (stmt != null){
+		            stmt.close();
+		        }
+		        if (conn != null) {
+		            connPool.returnConnection(conn);
+		        }
+		    }catch(Exception e){
+		    	 System.err.println(e);
+		    }
+		}
+		return topTen;
+	}
 	
+	//top 5 per category
+	public ArrayList<String> topFive(String category)
+	{
+		Statement stmt = null;
+		ResultSet rs = null;
+		Connection conn = null;
+		ArrayList<String> topTen = new ArrayList<>();
+		try{
+			conn = connPool.getConnection();
+			
+			if(conn != null){
+				stmt = conn.createStatement();
+				
+				String strQuery = "select isbn from (select Transactions.isbn, COUNT(*) as" + 
+				" count FROM Transactions, Book WHERE category = '" + category + "' and Transactions.isbn" + 
+						" = Book.isbn GROUP BY isbn ORDER BY count DESC) AS TopTen ORDER BY count DESC LIMIT 5;";
+				rs = stmt.executeQuery(strQuery);
+				while(rs.next()){
+					topTen.add(rs.getString(1));
+				}
+			}
+		}catch(SQLException e){
+			for(Throwable t: e){	
+				t.printStackTrace();
+			}
+		} catch (Exception et) {
+			et.printStackTrace();
+		}finally {
+		    try {
+		    	if (rs != null){
+		            rs.close();
+		        }
+		    	if (stmt != null){
+		            stmt.close();
+		        }
+		        if (conn != null) {
+		            connPool.returnConnection(conn);
+		        }
+		    }catch(Exception e){
+		    	 System.err.println(e);
+		    }
+		}
+		return topTen;
+	}
 }
