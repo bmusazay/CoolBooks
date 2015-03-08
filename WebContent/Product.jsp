@@ -35,13 +35,7 @@
 	out.println("<p> Inventory: "+book.getInventory()+ "</p>");
 	out.println("<p> Publish year: "+book.getYear()+ "</p>");
 	out.println("<p> Price: $"+book.getPrice()+ "</p>");
-
-	
-	
 	%>
-	
-	
-	
 	
 	<form action="Purchase" method="post">
 		<input type="submit" value="Purchase" id="submit"/>

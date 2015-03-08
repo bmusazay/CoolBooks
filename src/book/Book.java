@@ -12,7 +12,6 @@ public class Book implements Serializable
 	private String category;
 	private String author;
 	private int year;
-	private byte[] img;
 	
 	public Book(){
 	}

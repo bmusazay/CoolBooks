@@ -14,16 +14,40 @@
 <%
 BookDatabase bookDB = new BookDatabase();
 ArrayList<String> categories = bookDB.selectCategories();
-%>
-<select>
-<%
-for(int i = 0; i < categories.size(); i++){
+
+String category = request.getParameter("category");
+String search = request.getParameter("search");
 %>
 
-  <option value="category"><%=categories.get(i)%></option>
-<%}%>
-</select>
-
+	<form action="Search" method="post">
+		<input type="submit" value="Search" id="submit"/>
+		<div> 
+			<input type="text"  name="search" id="search" 
+			  <%
+	  			if (search != null) {%>
+	  			value="<%=search%>"
+	  			<%}%>/>
+		</div>
+		
+		<div> 
+		<select name="category">
+			<option value="all">All</option>
+			<%
+			for(int i = 0; i < categories.size(); i++) {
+			%>
+  			<option value="<%=categories.get(i)%>"
+  			<%
+	  			if (category != null 
+	  			&& category.equals(categories.get(i))) {%>
+	  			 	selected
+	  			<%}%>
+  			><%=categories.get(i)%></option>
+			<%}%>
+		</select>
+		</div>
+		
+	</form>
+		
 			<table>
 				<thead>
 					<tr>
@@ -31,12 +55,12 @@ for(int i = 0; i < categories.size(); i++){
 						<th>Author</th>
 						<th>Price</th>
 						<th>Inventory</th>
+						<th>Image</th>
 					</tr>
 				</thead>
 				<tbody>
 <%
-
-ArrayList<Book> books = bookDB.selectBooks();
+ArrayList<Book> books = bookDB.selectBooks(search, category);
 for(int i = 0; i < books.size(); i++){
 	Book book = books.get(i);
 %>
@@ -45,6 +69,7 @@ for(int i = 0; i < books.size(); i++){
 				<td><%=book.getAuthor() %></td>
 				<td><%=book.getPrice() %></td>
 				<td><%=book.getInventory() %></td>
+				<td><a href="Product.jsp?isbn=<%=book.getIsbn()%>"><img src='./BookImages/<%=book.getIsbn() %>.jpg'/><br></a></td>
 				</tr>
 <%}
 %>

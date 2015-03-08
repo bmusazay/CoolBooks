@@ -58,6 +58,7 @@ public class BookDatabase {
 		}
 		return resultNo;
 	}
+	
 	public Book getBook(String isbn)
 	{
 		Book curBook = new Book();
@@ -106,7 +107,7 @@ public class BookDatabase {
 		return curBook;
 	}
 	
-	public ArrayList<Book> selectBooks(){
+	public ArrayList<Book> selectBooks(String search, String category){
 		Statement stmt = null;
 		ResultSet rs = null;
 		Connection conn = null;
@@ -118,7 +119,16 @@ public class BookDatabase {
 			if(conn != null){
 				stmt = conn.createStatement();
 				
-				String strQuery = "select isbn, title, author, price, category from book";
+				String strQuery = "";
+				
+				if (category.equals("all")) {
+					strQuery = "select isbn, title, author, price, category from book "
+					        + "where title like '%" + search + "%';";
+				} else {
+					strQuery = "select isbn, title, author, price, category from book "
+					        + "where title like '%" + search + "%' and category = '" + category + "';";
+				}
+				
 				rs = stmt.executeQuery(strQuery);
 				while(rs.next()){
 					Book book = new Book();
@@ -195,7 +205,6 @@ public class BookDatabase {
 		}
 		return categories;
 	}
-	
-	
 }
+
 
