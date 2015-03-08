@@ -7,14 +7,16 @@ public class User implements Serializable{
 	private String pass;
 	private String fname;
 	private String lname;
+	private Boolean isAdmin;
 	public User(){
 	}
 	
-	public User(String email, String pass, String fname, String lname){
+	public User(String email, String pass, String fname, String lname, Boolean isAdmin){
 		this.pass = pass;
 		this.fname = fname;
 		this.lname = lname;
 		this.email = email;
+		this.isAdmin = isAdmin;
 	}
 	
 	public String getPass(){
@@ -46,6 +48,16 @@ public class User implements Serializable{
 	
 	public void setEmail(String email){
 		this.email = email;
+	}
+	
+	public Boolean isAdmin()
+	{
+		return this.isAdmin;
+	}
+	
+	public void setAdmin(Boolean value)
+	{
+		this.isAdmin = value;
 	}
 
 }

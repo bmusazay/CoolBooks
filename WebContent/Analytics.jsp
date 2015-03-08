@@ -16,8 +16,6 @@
 	out.println("<br>Weekly sales: $" + trDB.getSales("7"));
 	out.println("<br>Last Month sales: $" + trDB.getSales("lastmonth"));
 	out.println("<br>Last Week sales: $" + trDB.getSales("lastweek"));
-
-
 %>
 
 </body>
