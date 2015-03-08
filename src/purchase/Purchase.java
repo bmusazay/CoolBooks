@@ -53,8 +53,8 @@ public class Purchase extends HttpServlet {
 			
 		} else {
 		
+		
 			User user = (User)ses.getAttribute("userInstance");
-			
 			Book book = (Book)ses.getAttribute("bookInstance");
 			
 			if( book.getInventory() > 0)
@@ -65,11 +65,28 @@ public class Purchase extends HttpServlet {
 					//Create transaction
 					Transaction tr = new Transaction(user.getEmail(), book.getIsbn(),
 														1, book.getPrice() );
+					Date dt = new Date();
+					java.text.SimpleDateFormat sdf = 
+					     new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					String purchaseDate = sdf.format(dt);
+					
+					//Create transaction
+					Transaction tr = new Transaction(user.getEmail(), book.getIsbn(),
+														1, book.getPrice(), purchaseDate );
+					
+					//Upload transaction object to TransactionDB
+					TransactionDB trDB = new TransactionDB();
+					trDB.addTransaction(tr);
+					tr.setTranNumber(trDB.getOrderNumber(tr));
+					//Create transaction
+					Transaction tr = new Transaction(user.getEmail(), book.getIsbn(),
+														1, book.getPrice(), purchaseDate );
 					
 					//Upload transaction object to TransactionDB
 					TransactionDB trDB = new TransactionDB(tr);
 					trDB.addTransaction(book);
 					tr.setTranNumber(trDB.getOrderNumber());
+
 					//Send transaction to confirmation page to display
 					ses.setAttribute("transaction", tr);
 					response.sendRedirect("../CoolBooks/Confirmation.jsp");
@@ -77,7 +94,6 @@ public class Purchase extends HttpServlet {
 				{
 					// error page something went wrong
 				}
-				
 			} 
 			else 
 			{
