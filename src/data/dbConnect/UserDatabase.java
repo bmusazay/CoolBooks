@@ -90,8 +90,8 @@ public class UserDatabase {
 				}
 				
 				if (registered) {
-					strQuery = "insert Account(email, first_name, last_name, pass) values ('" + user.getEmail() + 
-							"', '" + user.getFName() +"', '" + user.getLName() + "', '" + user.getPass() + "')";
+					strQuery = "insert Account(email, first_name, last_name, pass, isAdmin) values ('" + user.getEmail() + 
+							"', '" + user.getFName() +"', '" + user.getLName() + "', '" + user.getPass() + "', false)";
 							
 					stmt.executeUpdate(strQuery);
 				}
@@ -164,6 +164,8 @@ public class UserDatabase {
 		}
 		return false;
 	}
+	
+	
 	
 }
 

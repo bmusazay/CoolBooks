@@ -19,14 +19,21 @@
 
 <%
 		
+<<<<<<< HEAD
 	String email = (String) session.getAttribute("loginId");
+=======
+	User sessionUser = (User)session.getAttribute("userInstance");
+>>>>>>> mhsaleh2
 	UserDatabase userDB = new UserDatabase();
-	User tempUser = userDB.selectUser(email);
+	User tempUser = userDB.selectUser(sessionUser.getEmail());
 	out.println("<h1> Email:"+tempUser.getEmail()+"<h1>");
 	out.println("<h1> First Name:"+tempUser.getFName()+"<h1>");
 	out.println("<h1> Last Name:"+tempUser.getLName()+"<h1>");		
 	
+<<<<<<< HEAD
 
+=======
+>>>>>>> mhsaleh2
 %>
 	<table>
 		<thead>
@@ -53,6 +60,7 @@
 		out.println("<td>"+transactions.get(i).getTotal()+"</td>");
 		out.println("</tr>");
 	}
+<<<<<<< HEAD
 %>
 		</tbody>
 	</table>
@@ -83,5 +91,36 @@
 
 		</tbody>
 	</table>
+=======
+%>
+		</tbody>
+	</table>
+	
+	<table>
+		<thead>
+			<tr>
+				<th>Review Date</th>
+				<th>ISBN</th>
+				<th>Review</th>
+				<th>Rating</th>
+			</tr>
+		</thead>
+		<tbody>
+<%
+	RatingDB ratingDB = new RatingDB();
+	ArrayList<Rating> ratings = ratingDB.getRatings(tempUser.getEmail());
+	
+	for(int i = 0; i < ratings.size(); i++){
+		out.println("<tr>");
+		out.println("<td>"+ratings.get(i).getReviewDate()+"</td>");
+		out.println("<td>"+ratings.get(i).getIsbn()+"</td>");
+		out.println("<td>"+ratings.get(i).getReview()+"</td>");
+		out.println("<td>"+ratings.get(i).getRating()+"</td>");
+		out.println("</tr>");
+	}
+%>
+		</tbody>
+	</table>
+>>>>>>> mhsaleh2
 </body>
 </html>

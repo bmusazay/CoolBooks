@@ -11,7 +11,12 @@ public class Transaction {
 	private String transDate;
 	private int tranNumber;
 	
+<<<<<<< HEAD
 	public Transaction() {};
+=======
+	public Transaction() {}
+	
+>>>>>>> mhsaleh2
 	public Transaction(String email, String isbn, int quantity, double price, String purchaseDate)
 	{
 		this.email = email;

@@ -78,14 +78,22 @@ public class RatingDB {
 								+ "time_reviewed, review from ratings where email = '" + email + "';";
 				
 				rs = stmt.executeQuery(strQuery);
+<<<<<<< HEAD
 				while(rs.next()){
+=======
+				while(rs.next()) {
+>>>>>>> mhsaleh2
 					Rating rating = new Rating();
 					rating.setIsbn(rs.getString(1));
 					rating.setRating(Integer.parseInt(rs.getString(2)));
 					rating.setReveiwDate(rs.getString(3));
 					rating.setReview(rs.getString(4));
 					ratings.add(rating);
+<<<<<<< HEAD
 				}			
+=======
+				}
+>>>>>>> mhsaleh2
 			}
 		} catch(SQLException e){
 			for(Throwable t: e){	
@@ -110,5 +118,9 @@ public class RatingDB {
 		}
 		return ratings;
 	}
+<<<<<<< HEAD
 }
 
+=======
+}
+>>>>>>> mhsaleh2

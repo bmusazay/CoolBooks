@@ -53,7 +53,7 @@ public class SignUp extends HttpServlet {
 		String fname= request.getParameter("fname");
 		String lname = request.getParameter("lname");
 		
-		User user = new User(email, passwd, fname, lname);
+		User user = new User(email, passwd, fname, lname, false);
 		UserDatabase dbConn = new UserDatabase();
 		
 		boolean registered = dbConn.registerUser(user);
