@@ -28,6 +28,9 @@
 	out.println("<p> "+book.getIsbn()+ "</p>");
 	out.println("<p> "+book.getCategory()+ "</p>");
 	
+	out.println("<img src='./BookImages/" + book.getIsbn() + ".jpg'/><br>");
+	
+	
 	out.println("<br><br>");
 	out.println("<p> Inventory: "+book.getInventory()+ "</p>");
 	out.println("<p> Publish year: "+book.getYear()+ "</p>");
