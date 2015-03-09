@@ -14,14 +14,14 @@
 	Book book = (Book)session.getAttribute("bookInstance");
 	Transaction tr = (Transaction)session.getAttribute("transaction");
 	out.println("<h1>Order number: " + tr.getTranNumber() + "</h1>");
-	out.println("<h1> ayyyyy lmao you just bought </h1>");
+	out.println("<h1> Thank you for your purchase of:</h1>");
 	out.println("<h2>" + book.getTitle() + "</h2>");
 	
-	
-	
 %>
-	
-	
+
+	<form action="front.jsp" method="post">	
+		<input type="submit" value="Return to shopping" id="return"/>
+	</form>
 
 </body>
 </html>

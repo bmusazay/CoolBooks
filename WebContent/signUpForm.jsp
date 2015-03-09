@@ -1,6 +1,11 @@
-<!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
 	<meta charset="UTF-8">
 	<style type="text/css">
 	
@@ -69,6 +74,11 @@
 	<form action="SignUp" name="form1" id="form1" method="post">
 		
 		<h1>Create a new account</h1>
+		
+		<%if (session.getAttribute("signup") != null && !(boolean)session.getAttribute("signup")) {
+			session.removeAttribute("signup");%>
+			<h2>This email is already associated with an account. Please select a different email.</h2>
+		<%}%>
 		
 		<div> 
 			<label> Email : </label>

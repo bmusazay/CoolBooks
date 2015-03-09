@@ -10,6 +10,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import user.User;
 import data.dbConnect.*;
@@ -43,11 +44,6 @@ public class SignUp extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		Cookie[] cookies = request.getCookies();
-		for(int i = 0; i < cookies.length; i++) {
-			
-		}
-		
 		String email= request.getParameter("email");
 		String passwd= request.getParameter("pass");
 		String fname= request.getParameter("fname");
@@ -55,13 +51,15 @@ public class SignUp extends HttpServlet {
 		
 		User user = new User(email, passwd, fname, lname, false);
 		UserDatabase dbConn = new UserDatabase();
-		
 		boolean registered = dbConn.registerUser(user);
+		HttpSession session = request.getSession();
+		
 		if (registered) {
-			response.sendRedirect("../CoolBooks/loginForm.html");
+			session.setAttribute("signup", true);
+			response.sendRedirect("../CoolBooks/loginForm.jsp");
 		} else {
-			ServletOutputStream out = response.getOutputStream();
-			out.println("<h1>Please select a different email<h1>");
+			session.setAttribute("signup", false);
+			response.sendRedirect("../CoolBooks/signUpForm.jsp");
 		}
 	}
 

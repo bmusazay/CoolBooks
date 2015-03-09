@@ -88,7 +88,9 @@
 	
 		<h1>Login to your account</h1>
 		
-		<%if (session.getAttribute("success") != null && !(boolean)session.getAttribute("success")) {%>
+		<%if (session.getAttribute("login") != null && !(boolean)session.getAttribute("login")) {
+			session.removeAttribute("login");
+		%>
 			<h2>Invalid username or password. Please try again.</h2>
 		<%}%>
 		
@@ -104,7 +106,7 @@
 		
 		<input type="submit" value="Login" id="submit"/>
 		
-		<a href="signUpForm.html" id="link"> Register an account </a>
+		<a href="signUpForm.jsp" id="link"> Register an account </a>
 	
 	</form>
 </body>

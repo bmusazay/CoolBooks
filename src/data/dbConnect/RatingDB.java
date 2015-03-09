@@ -23,7 +23,48 @@ public class RatingDB {
 		return connPool;
 	}
 	
-
+	public boolean alreadyRated(String email)
+	{
+		Statement stmt = null;
+		Connection conn = null;
+		ResultSet rs;
+		boolean rated = true;
+		
+		try{
+			//insert into Ratings(email, isbn, rating, time_reviewed, review)
+			//values ('test@gmail.com', '11-32-3323', '4', current_date(), 'This book sucks');
+			conn = connPool.getConnection();
+			if(conn != null){
+				stmt = conn.createStatement();
+				
+				String strQuery = "select email from ratings where email = '"+ email +"'";
+				
+				rs = stmt.executeQuery(strQuery);
+				while (rs.next()) {
+					rated = !rs.getString(1).equals(email);
+				}
+			}
+		}catch(SQLException e){
+			for(Throwable t: e){	
+				t.printStackTrace();
+			}
+		} catch (Exception et) {
+			et.printStackTrace();
+		}finally {
+		    try {
+		    	if (stmt != null){
+		            stmt.close();
+		        }
+		        if (conn != null) {
+		            connPool.returnConnection(conn);
+		        }
+		    }catch(Exception e){
+		    	 System.err.println(e);
+		    }
+		}
+		return rated;
+	}
+	
 	public int addRating(Rating rating)
 	{
 		Statement stmt = null;
@@ -61,7 +102,7 @@ public class RatingDB {
 		return resultNo;
 	}
 
-	public ArrayList<Rating> getRatings(String email){
+	public ArrayList<Rating> getUserRatings(String email){
 		Statement stmt = null;
 		ResultSet rs = null;
 		Connection conn = null;
@@ -80,6 +121,55 @@ public class RatingDB {
 				while(rs.next()) {
 					Rating rating = new Rating();
 					rating.setIsbn(rs.getString(1));
+					rating.setRating(Integer.parseInt(rs.getString(2)));
+					rating.setReveiwDate(rs.getString(3));
+					rating.setReview(rs.getString(4));
+					ratings.add(rating);
+				}
+			}
+		} catch(SQLException e){
+			for(Throwable t: e){	
+				t.printStackTrace();
+			}
+		} catch (Exception et) {
+			et.printStackTrace();
+		}finally {
+		    try {
+		    	if (rs != null){
+		            rs.close();
+		        }
+		    	if (stmt != null){
+		            stmt.close();
+		        }
+		        if (conn != null) {
+		            connPool.returnConnection(conn);
+		        }
+		    }catch(Exception e){
+		    	 System.err.println(e);
+		    }
+		}
+		return ratings;
+	}
+	
+	public ArrayList<Rating> getBookRatings(String isbn){
+		Statement stmt = null;
+		ResultSet rs = null;
+		Connection conn = null;
+		ArrayList<Rating> ratings = new ArrayList<>();
+		
+		try{
+			conn = connPool.getConnection();
+			
+			if(conn != null){
+				stmt = conn.createStatement();
+				
+				String strQuery = "select email, rating, "
+								+ "time_reviewed, review from ratings where isbn = '" + isbn + "';";
+				
+				rs = stmt.executeQuery(strQuery);
+				while(rs.next()) {
+					Rating rating = new Rating();
+					rating.setEmail(rs.getString(1));
 					rating.setRating(Integer.parseInt(rs.getString(2)));
 					rating.setReveiwDate(rs.getString(3));
 					rating.setReview(rs.getString(4));

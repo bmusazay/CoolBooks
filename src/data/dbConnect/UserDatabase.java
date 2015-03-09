@@ -71,7 +71,7 @@ public class UserDatabase {
 	//insert a new user
 	public boolean registerUser(User user){
 		
-		boolean registered = false;
+		boolean registered = true;
 		Statement stmt = null;
 		ResultSet rs = null;
 		Connection conn = null;
@@ -85,8 +85,8 @@ public class UserDatabase {
 				String strQuery = "select email from Account where email = '"+ user.getEmail() +"'";
 				
 				rs = stmt.executeQuery(strQuery);
-				if(rs.next()){
-					registered = !rs.getString(0).equals(user.getEmail());
+				while (rs.next()) {
+					registered = !rs.getString(1).equals(user.getEmail());
 				}
 				
 				if (registered) {

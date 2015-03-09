@@ -66,14 +66,12 @@ public class addRating extends HttpServlet {
 			String review = request.getParameter("review");
 			Rating rating = new Rating(user.getEmail(), book.getIsbn(), ratingValue, review, reviewDate);
 			RatingDB rDB = new RatingDB();
-			if (rDB.addRating(rating) > 0)
+			
+			if (rDB.alreadyRated(user.getEmail()))
 			{
-				response.sendRedirect("../CoolBooks/Product.jsp?isbn=" + rating.getIsbn());
-			} else
-			{
-				//duplicate rating
-				response.sendRedirect("../CoolBooks/test.html");
-			}
+				rDB.addRating(rating);
+			} 
+			response.sendRedirect("../CoolBooks/Product.jsp?isbn=" + rating.getIsbn());
 		}
 		
 	}
