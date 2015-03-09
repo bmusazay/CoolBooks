@@ -25,4 +25,9 @@
     <servlet-name>login</servlet-name>
     <url-pattern>/login</url-pattern>
   </servlet-mapping>
+  <context-param>
+    <description>Location to store uploaded file</description>
+    <param-name>file-upload</param-name>
+    <param-value>/Users/bilal/Documents/workspace/CoolBooks/WebContent/BookImages/</param-value>
+  </context-param>
 </web-app>

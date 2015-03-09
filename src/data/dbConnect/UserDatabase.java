@@ -165,7 +165,92 @@ public class UserDatabase {
 		return false;
 	}
 	
+	public int deleteUser(String email)
+	{
+		Statement stmt = null;
+		ResultSet rs = null;
+		Connection conn = null;
+		int resultNo = 0;
+		try{
+			conn = connPool.getConnection();
+			
+			if(conn != null){
+				stmt = conn.createStatement();
+				
+				String strQuery = "delete from Account" +
+						" where email = '"+ email +"'";
+				resultNo = stmt.executeUpdate(strQuery);
+			}
+			
+			
+		}catch(SQLException e){
+			for(Throwable t: e){	
+				t.printStackTrace();
+			}
+		}catch (Exception et) {
+			et.printStackTrace();
+		}finally {
+		    try {
+		    	if (rs != null){
+		            rs.close();
+		        }
+		    	if (stmt != null){
+		            stmt.close();
+		        }
+		        if (conn != null) {
+		            connPool.returnConnection(conn);
+		        }
+		    }catch(Exception e){
+		    	 System.err.println(e);
+		    }
+		}
+		return resultNo;
+	}
 	
 	
+	public Boolean isAdmin(String email)
+	{
+		Boolean isAdmin = false;
+		
+		Statement stmt = null;
+		ResultSet rs = null;
+		Connection conn = null;
+		try{
+			conn = connPool.getConnection();
+			
+			if(conn != null){
+				stmt = conn.createStatement();
+				
+				String strQuery = "select isAdmin from Account" +
+						" where email = '"+ email +"'";
+				rs = stmt.executeQuery(strQuery);
+				if(rs.next()){
+					isAdmin = rs.getBoolean(1);
+				}
+			}
+			
+		}catch(SQLException e){
+			for(Throwable t: e){	
+				t.printStackTrace();
+			}
+		}catch (Exception et) {
+			et.printStackTrace();
+		}finally {
+		    try {
+		    	if (rs != null){
+		            rs.close();
+		        }
+		    	if (stmt != null){
+		            stmt.close();
+		        }
+		        if (conn != null) {
+		            connPool.returnConnection(conn);
+		        }
+		    }catch(Exception e){
+		    	 System.err.println(e);
+		    }
+		}
+		return isAdmin;
+	}
 }
 

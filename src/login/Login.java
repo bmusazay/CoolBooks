@@ -51,14 +51,23 @@ public class Login extends HttpServlet {
 		
 			if(dbConn.verifyCredentials(user))
 			{
-				session.setAttribute("success", true);
-				session.setAttribute("userInstance", user);
-				String referer = request.getHeader("referer");
-				System.out.println(referer);
-				if (!referer.equals("http://localhost:8080/CoolBooks/loginForm.jsp")) {
-					response.sendRedirect(request.getHeader("referer"));
-				} else {
-					response.sendRedirect("../CoolBooks/front.jsp");
+				if (dbConn.isAdmin(user.getEmail() ))
+				{
+					user.setAdmin(true);
+					session.setAttribute("success", true);
+					session.setAttribute("userInstance", user);
+					response.sendRedirect("../CoolBooks/adminCP.jsp");
+				} else 
+				{
+					session.setAttribute("success", true);
+					session.setAttribute("userInstance", user);
+					String referer = request.getHeader("referer");
+					System.out.println(referer);
+					if (!referer.equals("http://localhost:8080/CoolBooks/loginForm.jsp")) {
+						response.sendRedirect(request.getHeader("referer"));
+					} else {
+						response.sendRedirect("../CoolBooks/front.jsp");
+					}
 				}
 			} else 
 			{
