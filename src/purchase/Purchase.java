@@ -60,6 +60,28 @@ public class Purchase extends HttpServlet {
 			
 			if( book.getInventory() > 0)
 			{
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+				Date dt = new Date();
+				java.text.SimpleDateFormat sdf = 
+				     new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				String purchaseDate = sdf.format(dt);
+				
+				//Create transaction
+				Transaction tr = new Transaction(user.getEmail(), book.getIsbn(),
+													1, book.getPrice(), purchaseDate );
+				
+				//Upload transaction object to TransactionDB
+				TransactionDB trDB = new TransactionDB();
+				trDB.addTransaction(tr);
+				tr.setTranNumber(trDB.getOrderNumber(tr));
+				//Send transaction to confirmation page to display
+				ses.setAttribute("transaction", tr);
+				response.sendRedirect("../CoolBooks/Confirmation.jsp");
+			} else 
+=======
+>>>>>>> ahmed-branch
 				BookDatabase db = new BookDatabase();
 				if (db.purchaseBook(book, 1) > 0) 
 				{
@@ -86,6 +108,10 @@ public class Purchase extends HttpServlet {
 				}
 			} 
 			else 
+<<<<<<< HEAD
+=======
+>>>>>>> origin/mhsaleh
+>>>>>>> ahmed-branch
 			{
 				//not in stock
 			}

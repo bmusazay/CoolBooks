@@ -1,14 +1,11 @@
-<!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
-<body>
-
-<!DOCTYPE html>
-<html>
-<head>
 	<meta charset="UTF-8">
 	<style type="text/css">
 	
@@ -39,7 +36,7 @@
 	
 	input[type='text'], input[type='password'], textarea {
 	  background-color: #99CCFF;
-	  color: #666;
+	  color: #FFFFFF;
 	  font-family: 'Verdana', 'Geneva', sans-serif;
 	  font-size: 25px;
 	  padding: 4px 6px;
@@ -69,55 +66,43 @@
 	  top: 1px;
 	}
 	
-<<<<<<< HEAD
-	#link {
-	  color: #FFFFFF;
-	  font-family: 'Verdana', 'Geneva', sans-serifS;
-	  font-size: 15px;
-      margin-left: 5em;
-	}
-	
 	</style>
 	
-	<title>Login to your account</title>
-=======
-	</style>
-	
-	<title>Login to your account.</title>
->>>>>>> ahmed-branch
+	<title>Insert title here</title>
 </head>
-
 <body>
-	<form action="login" method="post">
-	
-<<<<<<< HEAD
-		<h1>Login to your account</h1>
-=======
-		<legend>Login to your account</legend>
->>>>>>> ahmed-branch
+	<form action="SignUp" name="form1" id="form1" method="post">
+		
+		<h1>Create a new account</h1>
+		
+		<%if (session.getAttribute("signup") != null && !(boolean)session.getAttribute("signup")) {
+			session.removeAttribute("signup");%>
+			<h2>This email is already associated with an account. Please select a different email.</h2>
+		<%}%>
 		
 		<div> 
 			<label> Email : </label>
-			<input type = "text"  name="email" id="email" required="required"/>
+			<input type="text" name="email" id="email" required="required"/>
 		</div>
 		
 		<div>
 			<label> Password : </label>
-			<input type = "text"  name="pass" id="pass" required="required"/>
+			<input type="text" name="pass" id="pass" required="required"/>
 		</div>
 		
-		<input type="submit" value="Login" id="submit"/>
+		<div> 
+			<label> Confirm Password : </label>
+			<input type="text" name="repass" id="repass" required="required"/>
+		</div>
+			<div> <label> First Name : </label>
+			<input type="text" name="fname" id="fname" required="required"/>
+		</div>
+			<div> <label> Last Name : </label>
+			<input type="text" name="lname" id="lname" required="required"/>
+		</div>
 		
-<<<<<<< HEAD
-		<a href="signUpForm.html" id="link"> Register an account </a>
-=======
-		<a href="signUpForm.html"> Register an account </a>
->>>>>>> ahmed-branch
+		<input type="submit" value="Sign Up" id="submit"/>
 	
 	</form>
-
-
-</body>
-</html>
 </body>
 </html>

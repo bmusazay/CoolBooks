@@ -23,6 +23,7 @@
 	String email = (String) session.getAttribute("loginId");
 =======
 	User sessionUser = (User)session.getAttribute("userInstance");
+<<<<<<< HEAD
 >>>>>>> mhsaleh2
 	UserDatabase userDB = new UserDatabase();
 	User tempUser = userDB.selectUser(sessionUser.getEmail());
@@ -34,6 +35,14 @@
 
 =======
 >>>>>>> mhsaleh2
+=======
+	if (sessionUser != null) {
+		UserDatabase userDB = new UserDatabase();
+		User tempUser = userDB.selectUser(sessionUser.getEmail());
+		out.println("<h1> Email:"+tempUser.getEmail()+"<h1>");
+		out.println("<h1> First Name:"+tempUser.getFName()+"<h1>");
+		out.println("<h1> Last Name:"+tempUser.getLName()+"<h1>");		
+>>>>>>> ahmed-branch
 %>
 	<table>
 		<thead>
@@ -108,7 +117,9 @@
 		<tbody>
 <%
 	RatingDB ratingDB = new RatingDB();
-	ArrayList<Rating> ratings = ratingDB.getRatings(tempUser.getEmail());
+	
+	ArrayList<Rating> ratings = ratingDB.getUserRatings(tempUser.getEmail());
+	
 	
 	for(int i = 0; i < ratings.size(); i++){
 		out.println("<tr>");
@@ -121,6 +132,12 @@
 %>
 		</tbody>
 	</table>
+<<<<<<< HEAD
 >>>>>>> mhsaleh2
+=======
+	<%} else {
+		response.sendRedirect("loginForm.jsp");
+	}%>
+>>>>>>> ahmed-branch
 </body>
 </html>
