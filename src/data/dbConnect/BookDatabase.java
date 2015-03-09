@@ -2,8 +2,9 @@ package data.dbConnect;
 
 import java.sql.*;
 import java.util.*;
-import book.Book;
 
+import user.User;
+import book.Book;
 import data.dbConnect.DBConnectionPool;
 
 public class BookDatabase {
@@ -206,6 +207,49 @@ public class BookDatabase {
 		    }
 		}
 		return categories;
+	}
+	
+    public void addBook(Book book){
+		
+		Statement stmt = null;
+		ResultSet rs = null;
+		Connection conn = null;
+		
+		try{
+			conn = connPool.getConnection();
+			
+			if(conn != null){
+				stmt = conn.createStatement();
+
+				String strQuery = "insert Book(isbn, title, inventory_amount, price, category, author, publish_year) " + 
+				"values ('" + book.getIsbn() + "', '" + book.getTitle() +"', " + book.getInventory() + ", " + 
+						book.getPrice() + ", '" + book.getCategory() + "', '" + book.getAuthor() + "', " + book.getYear() 
+						+ ");"; 
+				
+				stmt.executeUpdate(strQuery);
+
+			}
+		}catch(SQLException e){
+			for(Throwable t: e){	
+				t.printStackTrace();
+			}
+		}catch(Exception et) {
+			et.printStackTrace();
+		}finally {
+		    try {
+		    	if (rs != null){
+		            rs.close();
+		        }
+		    	if (stmt != null){
+		            stmt.close();
+		        }
+		        if (conn != null) {
+		            connPool.returnConnection(conn);
+		        }
+		    }catch(Exception e){
+		    	 System.err.println(e);
+		    }
+		}
 	}
 }
 
