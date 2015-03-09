@@ -51,16 +51,6 @@ public class Login extends HttpServlet {
 		
 			if(dbConn.verifyCredentials(user))
 			{
-<<<<<<< HEAD
-				session.setAttribute("login", true);
-				session.setAttribute("userInstance", user);
-				String referer = (String)session.getAttribute("referer");
-				session.removeAttribute("referer"); // only one use per referral
-				if (referer != null) {
-					response.sendRedirect(referer);
-				} else {
-					response.sendRedirect("../CoolBooks/front.jsp");
-=======
 				if (dbConn.isAdmin(user.getEmail() ))
 				{
 					user.setAdmin(true);
@@ -69,17 +59,17 @@ public class Login extends HttpServlet {
 					response.sendRedirect("../CoolBooks/adminCP.jsp");
 				} else 
 				{
-					session.setAttribute("success", true);
+					session.setAttribute("login", true);
 					session.setAttribute("userInstance", user);
-					String referer = request.getHeader("referer");
-					System.out.println(referer);
-					if (!referer.equals("http://localhost:8080/CoolBooks/loginForm.jsp")) {
-						response.sendRedirect(request.getHeader("referer"));
+					String referer = (String)session.getAttribute("referer");
+					session.removeAttribute("referer"); // only one use per referral
+					if (referer != null) {
+						response.sendRedirect(referer);
 					} else {
 						response.sendRedirect("../CoolBooks/front.jsp");
 					}
->>>>>>> ahmed-branch
 				}
+
 			} else 
 			{
 				session.setAttribute("login", false);

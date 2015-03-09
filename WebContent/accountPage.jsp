@@ -68,7 +68,9 @@
 		<tbody>
 <%
 	RatingDB ratingDB = new RatingDB();
+	
 	ArrayList<Rating> ratings = ratingDB.getUserRatings(tempUser.getEmail());
+	
 	
 	for(int i = 0; i < ratings.size(); i++){
 		out.println("<tr>");
