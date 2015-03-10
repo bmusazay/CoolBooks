@@ -22,6 +22,16 @@
 		font-family: 'Verdana', 'Geneva', sans-serif;
 		color: #FFFFFF;
 	}
+		
+	h2 {
+		font-family: 'Verdana', 'Geneva', sans-serif;
+		color: #FFFFFF;
+	}
+		
+	h3 {
+		font-family: 'Verdana', 'Geneva', sans-serif;
+		color: #FFFFFF;
+	}
 	
 	label {
 		color: #FFFFFF;
