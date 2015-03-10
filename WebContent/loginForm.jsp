@@ -1,14 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
 
-<!DOCTYPE html>
 <html>
 <head>
 	<meta charset="UTF-8">
@@ -16,13 +9,13 @@
 	
 	body {
 	    background-color: #0099FF;
+    	margin: 0;
+	    padding: 0;
 	}
 	
 	form {
-	    padding-top: 0px;
-	    padding-right: 400px;
-	    padding-bottom: 25px;
-	    padding-left: 200px;
+	 	width: 400px;	
+		margin: 0 auto;
 	}
 	
 	h1 {
@@ -57,8 +50,6 @@
 	  border-radius: 5px;
 	  padding: 8px 10px;
 	  float: left;
-	  margin-top: 10px;
-	  margin-left: 9em;
 	  font-size: 18px;
 	  text-decoration: none;
 	  text-transform: uppercase;
@@ -75,7 +66,6 @@
 	  color: #FFFFFF;
 	  font-family: 'Verdana', 'Geneva', sans-serifS;
 	  font-size: 15px;
-      margin-left: 5em;
 	}
 	
 	</style>

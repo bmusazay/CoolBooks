@@ -73,12 +73,12 @@ if (books.size() != 0) {
 
 int pageNo;
 if (request.getParameter("page") == null) {
-	pageNo = 0;
+	pageNo = 1;
 } else {
 	pageNo = Integer.parseInt((String)request.getParameter("page"));
 }
 int maxNo = books.size();
-for(int i = pageNo * 20; i < pageNo * 20 + 20; i++){
+for(int i = (pageNo - 1) * 20; i < (pageNo - 1) * 20 + 20; i++){
 	if (i < books.size()) {
 		Book book = books.get(i);
 %>
@@ -87,14 +87,14 @@ for(int i = pageNo * 20; i < pageNo * 20 + 20; i++){
 				<td><%=book.getAuthor() %></td>
 				<td><%=book.getPrice() %></td>
 				<td><%=book.getInventory() %></td>
-				<td><a href="Product.jsp?isbn=<%=book.getIsbn()%>"><img src='./BookImages/<%=book.getIsbn() %>.jpg'/><br></a></td>
+				<td><a href="Product.jsp?isbn=<%=book.getIsbn()%>"><img src='./BookImages/<%=book.getIsbn() %>.png'/><br></a></td>
 				</tr>
 <% }
 }%>
 				</tbody>
 			</table>
 	
-	<%if ((pageNo + 1) * 20 > maxNo) { %>
+	<%if (pageNo * 20 > maxNo) { %>
 		<form action="front.jsp?search=<%=search%>&category=<%=category%>&page=<%=pageNo + 1%>" method="post">	
 			<input type="submit" value="Next Page" id="next" disabled/>
 		</form>
@@ -104,15 +104,15 @@ for(int i = pageNo * 20; i < pageNo * 20 + 20; i++){
 		</form>
 	<%}%>
 	
-	<h4> Page <%=pageNo + 1%> / <%=maxNo / 20 + 1%> </h4>
+	<h4> Page <%=pageNo%> / <%=maxNo / 20 + 1%> </h4>
 	
-	<%if (pageNo < 1) { %>
+	<%if (pageNo - 1 < 1) { %>
 		<form action="front.jsp?search=<%=search%>&category=<%=category%>&page=<%=pageNo - 1%>" method="post">		
-			<input type="submit" value="Previous Page" id="next" disabled/>
+			<input type="submit" value="Previous Page" id="previous" disabled/>
 		</form>
 	<%} else { %>
 	<form action="front.jsp?search=<%=search%>&category=<%=category%>&page=<%=pageNo - 1%>" method="post">	
-			<input type="submit" value="Previous Page" id="next"/>
+			<input type="submit" value="Previous Page" id="previous"/>
 		</form>
 	<%}
 	
