@@ -132,7 +132,7 @@ for(int i = 0; i < books.size(); i++){
 				<td><%=book.getAuthor() %></td>
 				<td><%=book.getPrice() %></td>
 				<td><%=book.getInventory() %></td>
-				<td><a href="Product.jsp?isbn=<%=book.getIsbn()%>"><img src='./BookImages/<%=book.getIsbn() %>.jpg'/><br></a></td>
+				<td><a href="Product.jsp?isbn=<%=book.getIsbn()%>"><img src='./BookImages/<%=book.getIsbn() %>.png]'/><br></a></td>
 				</tr>
 <%}
 %>

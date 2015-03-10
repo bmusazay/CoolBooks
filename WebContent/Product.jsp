@@ -31,7 +31,7 @@
 	out.println("<p> "+book.getIsbn()+ "</p>");
 	out.println("<p> "+book.getCategory()+ "</p>");
 	
-	out.println("<img src='./BookImages/" + book.getIsbn() + ".jpg'/><br>");
+	out.println("<img src='./BookImages/" + book.getIsbn() + ".png'/><br>");
 	
 	
 	out.println("<br><br>");
