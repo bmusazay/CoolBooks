@@ -9,62 +9,6 @@
 
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 	<style type="text/css">
-	
-	body {
-	    background-color: #0099FF;
-	}
-	
-	form {
-
-	}
-	
-	h1 {
-		font-family: 'Verdana', 'Geneva', sans-serif;
-		color: #FFFFFF;
-	}
-	
-	input[type='text'], textarea {
-	  background-color: #99CCFF;
-	  color: #FFFFFF;
-	  font-family: 'Verdana', 'Geneva', sans-serif;
-	  font-size: 25px;
-	  padding: 4px 6px;
-	  border: 1px solid #FFFFFF;
-	  margin-bottom:5px;
-	  border-radius: 3px;
-	}
-	
-	input[type='submit'], a.add {
-	  background-color: #0000FF;
-	  color: #f3dad1;
-	  border: none;
-	  border-radius: 5px;
-	  padding: 8px 10px;
-	  float: right;
-	  margin-top: 2px;
-	  font-size: 18px;
-	  text-decoration: none;
-	  text-transform: uppercase;
-	}
-	
-	input[type='submit']:hover, a.add:hover {
-	  background-color: #0066FF;
-	  color: #f3dad1;
-	  cursor: pointer;
-	  top: 1px;
-	}
-	
-	select {
-	  background-color: #0000FF;
-	  color: #f3dad1;
-	  border: none;
-	  border-radius: 5px;
-	  padding: 8px 10px;
-	  font-size: 18px;
-	  text-decoration: none;
-	  text-transform: uppercase;
-	}
-	
 	</style>
 	
 	<title>Welcome to CoolBooks</title>
@@ -109,7 +53,10 @@ if (search == null) {
 	  			if (search != null) {%>
 	  			value="<%=search%>"
 	  			<%}%>/>
-		
+	  			<%  
+ArrayList<Book> books = bookDB.selectBooks(search, category);
+if (books.size() != 0) {
+	  			%>
 	</form>
 			<table>
 				<thead>
@@ -123,9 +70,17 @@ if (search == null) {
 				</thead>
 				<tbody>
 <%
-ArrayList<Book> books = bookDB.selectBooks(search, category);
-for(int i = 0; i < books.size(); i++){
-	Book book = books.get(i);
+
+int pageNo;
+if (request.getParameter("page") == null) {
+	pageNo = 0;
+} else {
+	pageNo = Integer.parseInt((String)request.getParameter("page"));
+}
+int maxNo = books.size();
+for(int i = pageNo * 20; i < pageNo * 20 + 20; i++){
+	if (i < books.size()) {
+		Book book = books.get(i);
 %>
 				<tr>
 				<td><%=book.getTitle()%></td>
@@ -134,12 +89,34 @@ for(int i = 0; i < books.size(); i++){
 				<td><%=book.getInventory() %></td>
 				<td><a href="Product.jsp?isbn=<%=book.getIsbn()%>"><img src='./BookImages/<%=book.getIsbn() %>.jpg'/><br></a></td>
 				</tr>
-<%}
-%>
+<% }
+}%>
 				</tbody>
 			</table>
-		
-	<%if (session.getAttribute("userInstance") == null) {%>
+	
+	<%if ((pageNo + 1) * 20 > maxNo) { %>
+		<form action="front.jsp?search=<%=search%>&category=<%=category%>&page=<%=pageNo + 1%>" method="post">	
+			<input type="submit" value="Next Page" id="next" disabled/>
+		</form>
+	<%} else { %>
+		<form action="front.jsp?search=<%=search%>&category=<%=category%>&page=<%=pageNo + 1%>" method="post">	
+			<input type="submit" value="Next Page" id="next"/>
+		</form>
+	<%}%>
+	
+	<h4> Page <%=pageNo + 1%> / <%=maxNo / 20 + 1%> </h4>
+	
+	<%if (pageNo < 1) { %>
+		<form action="front.jsp?search=<%=search%>&category=<%=category%>&page=<%=pageNo - 1%>" method="post">		
+			<input type="submit" value="Previous Page" id="next" disabled/>
+		</form>
+	<%} else { %>
+	<form action="front.jsp?search=<%=search%>&category=<%=category%>&page=<%=pageNo - 1%>" method="post">	
+			<input type="submit" value="Previous Page" id="next"/>
+		</form>
+	<%}
+	
+	if (session.getAttribute("userInstance") == null) {%>
 		<form action="loginForm.jsp" method="post">	
 			<input type="submit" value="Login" id="login"/>
 		</form>
@@ -152,7 +129,9 @@ for(int i = 0; i < books.size(); i++){
 		<form action="accountPage.jsp" method="post">	
 			<input type="submit" value="Logged in as <%=email%>" id="account"/>
 		</form>
-	<%}%>
-	
+	<%}
+} else {%>
+	<h2>Your search "<%=search%>" did not match any books in category "<%=category%>".</h2>
+<%}%>
 </body>
 </html>

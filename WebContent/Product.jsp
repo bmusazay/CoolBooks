@@ -46,6 +46,11 @@
 		<h2>You have already rated this book.</h2>
 	<%}
 	
+	if (session.getAttribute("purchased") != null && !(boolean)session.getAttribute("purchased")) {
+		session.removeAttribute("purchased");%>
+		<h2>This book is now out of stock.</h2>
+	<%}
+	
 	
 	if (user == null) {
 		session.setAttribute("referer", "Product.jsp?isbn=" + book.getIsbn());
@@ -54,7 +59,7 @@
 			<input type="submit" value="Login to buy and rate." id="login"/>
 		</form>
 	<%} else {
-		if (book.getInventory() > 1) {%>
+		if (book.getInventory() > 0) {%>
 			<form action="Purchase" method="post">
 				<input type="submit" value="Purchase" id="submit"/>
 			</form>
@@ -107,6 +112,40 @@
 %>
 	</tbody>
 </table>
+
+			<h3> Similar Books</h3>
+
+			<table>
+				<thead>
+					<tr>
+						<th>Title</th>
+						<th>Author</th>
+						<th>Price</th>
+						<th>Inventory</th>
+						<th>Image</th>
+					</tr>
+				</thead>
+				<tbody>
+<%
+String category = book.getCategory();
+String search = "";
+ArrayList<Book> books = bookDB.selectBooks(search, category);
+for(int i = 0; i < books.size(); i++){
+	Book tempBook = books.get(i);
+	if (!tempBook.getTitle().equals(book.getTitle())) {
+%>
+				<tr>
+				<td><%=tempBook.getTitle()%></td>
+				<td><%=tempBook.getAuthor() %></td>
+				<td><%=tempBook.getPrice() %></td>
+				<td><%=tempBook.getInventory() %></td>
+				<td><a href="Product.jsp?isbn=<%=tempBook.getIsbn()%>"><img src='./BookImages/<%=tempBook.getIsbn() %>.jpg'/><br></a></td>
+				</tr>
+<%	}
+}
+%>
+				</tbody>
+			</table>
 		
 </body>
 </html>

@@ -123,11 +123,11 @@ public class BookDatabase {
 				String strQuery = "";
 				
 				if (category == null || category.equals("all")) {
-					strQuery = "select isbn, title, author, price, category from book "
+					strQuery = "select isbn, title, author, price, category, inventory_amount from book "
 					         + "where title like '%" + search + "%' or author like '%" + search + "%'"
 					         + "or isbn like '%" + search + "%';";
 				} else {
-					strQuery = "select isbn, title, author, price, category from book "
+					strQuery = "select isbn, title, author, price, category, inventory_amount from book "
 					         + "where (title like '%" + search + "%' or author like '%" + search + "%'"
 					         + "or isbn like '%" + search + "%') and category = '" + category + "';";
 				}
@@ -140,6 +140,7 @@ public class BookDatabase {
 					book.setAuthor(rs.getString(3));
 					book.setPrice(Double.parseDouble(rs.getString(4)));
 					book.setCategory(rs.getString(5));
+					book.setInventory(Integer.parseInt(rs.getString(6)));
 					books.add(book);
 				}
 			}

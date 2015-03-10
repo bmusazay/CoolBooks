@@ -87,12 +87,12 @@
 		
 		<div>
 			<label> Password : </label>
-			<input type="text" name="pass" id="pass" required="required"/>
+			<input type="password" name="pass" id="pass" required="required"/>
 		</div>
 		
 		<div> 
 			<label> Confirm Password : </label>
-			<input type="text" name="repass" id="repass" required="required"/>
+			<input type="password" name="repass" id="repass" required="required"/>
 		</div>
 			<div> <label> First Name : </label>
 			<input type="text" name="fname" id="fname" required="required"/>

@@ -77,12 +77,16 @@ public class Purchase extends HttpServlet {
 				response.sendRedirect("../CoolBooks/Confirmation.jsp");
 			} else 
 			{
-				// error page something went wrong
+				HttpSession session = request.getSession();
+				session.setAttribute("purchased", false);
+				response.sendRedirect(request.getHeader("referer"));
 			}
 			
 		} else 
 		{
-			//not in stock
+			HttpSession session = request.getSession();
+			session.setAttribute("purchased", false);
+			response.sendRedirect(request.getHeader("referer"));
 		}
 		
 	}

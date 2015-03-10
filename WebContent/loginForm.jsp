@@ -101,7 +101,7 @@
 		
 		<div>
 			<label> Password : </label>
-			<input type = "text"  name="pass" id="pass" required="required"/>
+			<input type = "password"  name="pass" id="pass" required="required"/>
 		</div>
 		
 		<input type="submit" value="Login" id="submit"/>
