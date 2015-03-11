@@ -112,7 +112,7 @@
 	#loginout { float: right; }
 	#account { float: right; margin-top: 10px;}
 	
-	table, tr { color: #FFFFFF; border-collapse: collapse; border: 1px solid #FFFFFF;}
+	table, tr { color: #FFFFFF; border-collapse: collapse; border: 1px solid #FFFFFF; }
 
 	
 	#books { margin-top: 250px; margin-left: 200px; width: 75%;} 
@@ -168,10 +168,7 @@ if (search == null) {
 	  			if (search != null) {%>
 	  			value="<%=search%>"
 	  			<%}%>/>
-	  			<%  
-ArrayList<Book> books = bookDB.selectBooks(search, category);
-if (books.size() != 0) {
-	  			%>
+
 	</form>
 	
 	 <selection id="user">
@@ -189,8 +186,15 @@ if (books.size() != 0) {
 		<form action="accountPage.jsp" method="post">	
 			<input type="submit" value="Logged in as <%=email%>" id="account"/>
 		</form>
-	<%} %>
+	<%}%>
 	</selection>
+	<%
+	ArrayList<Book> books = bookDB.selectBooks(search, category);
+	if (books.size() != 0) {
+	%>
+	
+	
+
 	
 			<table id="books">
 				<tbody>

@@ -61,13 +61,7 @@ public class Login extends HttpServlet {
 				{
 					session.setAttribute("login", true);
 					session.setAttribute("userInstance", user);
-					String referer = (String)session.getAttribute("referer");
-					session.removeAttribute("referer"); // only one use per referral
-					if (referer != null) {
-						response.sendRedirect(referer);
-					} else {
-						response.sendRedirect("../CoolBooks/front.jsp");
-					}
+					response.sendRedirect("../CoolBooks/front.jsp");
 				}
 
 			} else 
