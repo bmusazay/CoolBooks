@@ -341,8 +341,9 @@ public class TransactionDB {
 			if(conn != null){
 				stmt = conn.createStatement();
 				
-				String strQuery = "select isbn from (select total as biweek from Transactions where purchaseDate BETWEEN " +
-						"date_sub( now( ) , INTERVAL 14 DAY ) AND NOW( )) AS TopFive ORDER BY count DESC LIMIT 5";
+				String strQuery = "select isbn from (select Transactions.isbn, COUNT(*) " + 
+				"as count FROM Transactions, Book WHERE  Transactions.isbn = Book.isbn GROUP BY " + 
+						"isbn ORDER BY count DESC) AS TopFive ORDER BY count DESC LIMIT 5;";
 				rs = stmt.executeQuery(strQuery);
 				while(rs.next()){
 					popular.add(rs.getString(1));
@@ -388,14 +389,14 @@ public class TransactionDB {
 			if(conn != null){
 				stmt = conn.createStatement();
 				
-				String strQuery = "select * from (select email, COUNT(*) as count from Transactions,Book where " + 
+				String strQuery = "select email, count from (select email, COUNT(*) as count from Transactions,Book where " + 
 				"Transactions.isbn = Book.isbn AND purchaseDate BETWEEN date_sub( now( ) , INTERVAL 30 DAY ) " + 
 						"AND NOW( ) and category = '" + category + "' ORDER BY count) as customers where count > 2";
 				rs = stmt.executeQuery(strQuery);
 				while(rs.next()){
 					String[] values = new String[2];
 					values[0] = rs.getString(1);
-					values[1] = Integer.toString(rs.getInt(1));
+					values[1] = Integer.toString(rs.getInt(2));
 					customer.add(values);
 				}
 			}

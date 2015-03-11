@@ -19,6 +19,7 @@ import user.User;
 import rating.Rating;
 
 
+
 /**
  * Servlet implementation class addRating
  */
@@ -66,10 +67,12 @@ public class addRating extends HttpServlet {
 			String review = request.getParameter("review");
 			Rating rating = new Rating(user.getEmail(), book.getIsbn(), ratingValue, review, reviewDate);
 			RatingDB rDB = new RatingDB();
-			
+			BookDatabase bDB = new BookDatabase();
 			if (rDB.alreadyRated(user.getEmail()))
 			{
 				rDB.addRating(rating);
+				bDB.addRating(ratingValue,  book.getIsbn());
+				
 			} 
 			response.sendRedirect("../CoolBooks/Product.jsp?isbn=" + rating.getIsbn());
 		}

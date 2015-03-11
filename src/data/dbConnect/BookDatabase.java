@@ -251,6 +251,226 @@ public class BookDatabase {
 		    	 System.err.println(e);
 		    }
 		}
+		
+	}
+    
+    public int deleteBook(String isbn)
+	{
+		Statement stmt = null;
+		ResultSet rs = null;
+		Connection conn = null;
+		int resultNo = 0;
+		try{
+			conn = connPool.getConnection();
+			
+			if(conn != null){
+				stmt = conn.createStatement();
+				
+				String strQuery = "delete from Book" +
+						" where isbn = '"+ isbn +"'";
+				resultNo = stmt.executeUpdate(strQuery);
+			}
+			
+			
+		}catch(SQLException e){
+			for(Throwable t: e){	
+				t.printStackTrace();
+			}
+		}catch (Exception et) {
+			et.printStackTrace();
+		}finally {
+		    try {
+		    	if (rs != null){
+		            rs.close();
+		        }
+		    	if (stmt != null){
+		            stmt.close();
+		        }
+		        if (conn != null) {
+		            connPool.returnConnection(conn);
+		        }
+		    }catch(Exception e){
+		    	 System.err.println(e);
+		    }
+		}
+		return resultNo;
+	}
+    
+    public int updateQuantity(String isbn, int quantity)
+    {
+    	Statement stmt = null;
+		ResultSet rs = null;
+		Connection conn = null;
+		int resultNo = 0;
+		try{
+			conn = connPool.getConnection();
+			
+			if(conn != null){
+				stmt = conn.createStatement();
+				
+				String strQuery = "update Book set inventory_amount = " + quantity + " where isbn" + 
+				" = '" + isbn + "'"; 
+				resultNo = stmt.executeUpdate(strQuery);
+			}
+			
+			
+		}catch(SQLException e){
+			for(Throwable t: e){	
+				t.printStackTrace();
+			}
+		}catch (Exception et) {
+			et.printStackTrace();
+		}finally {
+		    try {
+		    	if (rs != null){
+		            rs.close();
+		        }
+		    	if (stmt != null){
+		            stmt.close();
+		        }
+		        if (conn != null) {
+		            connPool.returnConnection(conn);
+		        }
+		    }catch(Exception e){
+		    	 System.err.println(e);
+		    }
+		}
+		return resultNo;
+    }
+    
+    public double getRatings(String isbn)
+    {
+    	double rating = 0.0;
+		Statement stmt = null;
+		ResultSet rs = null;
+		Connection conn = null;
+		try{
+			conn = connPool.getConnection();
+			if(conn != null){
+				stmt = conn.createStatement();		
+				String strQuery = "select rating from Book where isbn = '" + isbn + "';";
+				rs = stmt.executeQuery(strQuery);
+				if(rs.next()){
+					rating = rs.getDouble(1);
+				}
+			}
+		}catch(SQLException e){
+			for(Throwable t: e){	
+				t.printStackTrace();
+			}
+		}catch (Exception et) {
+			et.printStackTrace();
+		}finally {
+		    try {
+		    	if (rs != null){
+		            rs.close();
+		        }
+		    	if (stmt != null){
+		            stmt.close();
+		        }
+		        if (conn != null) {
+		            connPool.returnConnection(conn);
+		        }
+		    }catch(Exception e){
+		    	 System.err.println(e);
+		    }
+		}
+		return rating;
+    }
+    
+    public double getNumRatings(String isbn)
+    {
+    	int rating = 0;
+		Statement stmt = null;
+		ResultSet rs = null;
+		Connection conn = null;
+		try{
+			conn = connPool.getConnection();
+			if(conn != null){
+				stmt = conn.createStatement();		
+				String strQuery = "select numRatings from Book where isbn = '" + isbn + "';";
+				rs = stmt.executeQuery(strQuery);
+				if(rs.next()){
+					rating = rs.getInt(1);
+				}
+			}
+		}catch(SQLException e){
+			for(Throwable t: e){	
+				t.printStackTrace();
+			}
+		}catch (Exception et) {
+			et.printStackTrace();
+		}finally {
+		    try {
+		    	if (rs != null){
+		            rs.close();
+		        }
+		    	if (stmt != null){
+		            stmt.close();
+		        }
+		        if (conn != null) {
+		            connPool.returnConnection(conn);
+		        }
+		    }catch(Exception e){
+		    	 System.err.println(e);
+		    }
+		}
+		return rating;
+    }
+    
+    public int addRating(int rating, String isbn)
+	{
+		
+		Statement stmt = null;
+		ResultSet rs = null;
+		int resultNo = 0;
+		Connection conn = null;
+		try{
+
+			conn = connPool.getConnection();
+			if(conn != null){
+				stmt = conn.createStatement();	
+				
+				String getNum = "select numRatings, rating from Book where isbn = '" + isbn + "';";
+				int numRatings = 0;
+				double curRating = 0.0;
+				rs = stmt.executeQuery(getNum);
+				while(rs.next()){
+					numRatings = rs.getInt(1);
+					curRating = rs.getDouble(2);
+				}
+				numRatings++;
+				
+				double newRating = (curRating + rating) / numRatings;
+				
+				String strQuery = "update Book set rating = " + newRating +
+						" where isbn = '"+ isbn +"';"; 
+				resultNo = stmt.executeUpdate(strQuery);
+				strQuery = "update Book set numRatings = " + numRatings + " where isbn = '"+ isbn +"';"; 
+				resultNo = stmt.executeUpdate(strQuery);
+			}
+		}catch(SQLException e){
+			for(Throwable t: e){	
+				t.printStackTrace();
+			}
+		} catch (Exception et) {
+			et.printStackTrace();
+		}finally {
+		    try {
+		    	if (rs != null){
+		            rs.close();
+		        }
+		    	if (stmt != null){
+		            stmt.close();
+		        }
+		        if (conn != null) {
+		            connPool.returnConnection(conn);
+		        }
+		    }catch(Exception e){
+		    	 System.err.println(e);
+		    }
+		}
+		return resultNo;
 	}
 }
 

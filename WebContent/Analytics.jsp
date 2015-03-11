@@ -3,73 +3,127 @@
     
 <%@ page import="data.dbConnect.*" %>
 <%@ page import="java.util.*" %>
+<%@ page import="book.Book" %>
+<%@ page import="user.User" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>Analytics</title>
 </head>
 <body>
 
-
-Maintain the aggregate sales and profit of the store weekly and monthly. 
-Then, compare the value change (i.e. increase/decrease) of sales and profit with
- the previous week and month. 
- o Maintain weekly the top 10 bestsellers of the entire store and the top 
- 5 bestsellers of each category. Also main the list of the most favorite 
- books bi-‐‐weekly.
  
- o Develop a direct marketing data; for each product category, a list of customers 
- that buy theproduct more than 2 times per month. 
- 
- o Other interesting summary data that you will come up with. 
- 
- <br><br><br>
+<h1>Analytics</h1>
 
 <%
 	TransactionDB trDB = new TransactionDB();
-	out.println("Monthly sales: $" + trDB.getSales("30"));
-	out.println("<br>Weekly sales: $" + trDB.getSales("7"));
-	out.println("<br>Last Month sales: $" + trDB.getSales("lastmonth"));
-	out.println("<br>Last Week sales: $" + trDB.getSales("lastweek"));
-	out.println("<br>Weekly Top 10: <br>");
+	BookDatabase bDB = new BookDatabase();
+	%>
+	
+	<table>
+	<thead>
+		<tr>
+			<th></th>
+			<th></th>
+
+		</tr>
+	</thead>
+	<tbody>
+	<tr>
+	<td>Current Month Sales:   </td>
+	<td>$<%=trDB.getSales("30")%></td>
+	</tr>
+	<tr>
+	<td>Previous Month Sales:  </td>
+	<td>$<%=trDB.getSales("lastmonth")%></td>
+	</tr>
+	<tr>
+	<td>Current Week Sales:    </td>
+	<td>$<%=trDB.getSales("7")%></td>
+	</tr>
+	<tr>
+	<td>Previous Week Sales:   </td>
+	<td>$<%=trDB.getSales("lastweek")%></td>
+	</tr>
+	</tbody>
+</table>
+	
+	<% 
+	out.println("<br><br><h2>Weekly Top 10 Bestsellers: </h2><br>");
 	ArrayList<String> topTen = trDB.topTenBestSellers();
+	%>
+	
+	<table>
+				<thead>
+					<tr>
+						<th>Title</th>
+						<th>Isbn</th>
+						<th>Image</th>
+					</tr>
+				</thead>
+				<tbody>
+	
+	<% 
 	for (int i = 0; i < topTen.size(); i++)
 	{
-		out.println( topTen.get(i) );
-		out.println("<br>");
-	}
+		Book book = bDB.getBook(topTen.get(i));
+		%>
+		<tr>
+			<td><%=book.getTitle()%></td>
+			<td><%=book.getIsbn() %></td>
+			<td><%=book.getInventory() %></td>
+			<td><a href="Product.jsp?isbn=<%=book.getIsbn()%>"><img src='./BookImages/<%=book.getIsbn() %>.png'/><br></a></td>
+		</tr>
+	<% } %>
 	
+	</tbody>
+	</table>
+	<% 
 	out.println("<br><br><br>");
 	
-	out.println("<br>Top 5 popular: <br>");
+	out.println("<br><h2>Top 5 Most Popular (biweekly): </h2><br>");
 	ArrayList<String> topFive = trDB.biweeklyPopular();
+	%>
+	
+	<table>
+			<thead>
+				<tr>
+					<th>Title</th>
+					<th>Isbn</th>
+					<th>Image</th>
+				</tr>
+			</thead>
+			<tbody>
+	<% 
 	for (int i = 0; i < topFive.size(); i++)
 	{
-		out.println(topFive.get(i));
-		out.println("<br>");
-	}
+		Book book = bDB.getBook(topFive.get(i));
+		%>
+		<tr>
+			<td><%=book.getTitle()%></td>
+			<td><%=book.getIsbn() %></td>
+			<td><%=book.getInventory() %></td>
+			<td><a href="Product.jsp?isbn=<%=book.getIsbn()%>"><img src='./BookImages/<%=book.getIsbn() %>.png'/><br></a></td>
+		</tr>
+	<% } %>
 	
-	
-	
-	BookDatabase bookDB = new BookDatabase();
-	ArrayList<String> categories = bookDB.selectCategories();
+	</tbody>
+	</table>
+	<%
+	ArrayList<String> categories = bDB.selectCategories();
 
-	
-	
-	out.println("<br>5 Bestsellers by Category : <br>");
+	out.println("<br><h2>Top 5 Bestsellers by Category : </h2><br>");
 	String category = request.getParameter("category");
 
 	if (category == null) {
 		category = "all";
 	}
 %>
-	
-	<form action="Search" method="post">
+	<form action="TopFive" method="post">
 	
 		<select name="category">
-			<option value="all">All</option>
 			<%
 			for(int i = 0; i < categories.size(); i++) {
 			%>
@@ -84,9 +138,85 @@ Then, compare the value change (i.e. increase/decrease) of sales and profit with
 		</select>
 	
 		<input type="submit" value="Top 5" id="submit"/>
-		<input type="text"  name="search" id="search" />
 	  			
 	</form>
+	
+	<% 
+		if (!category.equals("all")) {
+			ArrayList<String> isbnTopFive = trDB.topFive(category);
+			if (isbnTopFive.size() != 0) 
+			{
+	%>
+		<table>
+				<thead>
+					<tr>
+						<th>Title</th>
+						<th>Isbn</th>
+						<th>Inventory</th>
+						<th>Image</th>
+					</tr>
+				</thead>
+				<tbody>
+
+
+		<%
+		for (int i = 0; i < isbnTopFive.size(); i++)
+		{
+			
+			Book book = bDB.getBook(isbnTopFive.get(i));	
+		%>
+				<tr>
+				<td><%=book.getTitle()%></td>
+				<td><%=book.getIsbn() %></td>
+				<td><%=book.getInventory() %></td>
+				<td><a href="Product.jsp?isbn=<%=book.getIsbn()%>"><img src='./BookImages/<%=book.getIsbn() %>.png'/><br></a></td>
+				</tr>
+		<% }
+		} %>
+				</tbody>
+			</table>
+	<%} %>
+	
+	
+	<br><br>
+	
+	<h2>Loyal Customers of selected category: </h2>
+	
+	<% 
+	if (!category.equals("all")) {
+			ArrayList<String[]> users = trDB.customersByCategory(category);
+			if (users.size() != 0) 
+			{
+	%>
+		<table>
+				<thead>
+					<tr>
+						<th>Email</th>
+						<th>Purchases</th>
+					</tr>
+				</thead>
+				<tbody>
+
+
+		<%
+		UserDatabase uDB = new UserDatabase();
+		for (int i = 0; i < users.size(); i++)
+		{
+			
+			User customer = uDB.selectUser(users.get(i)[0]);	
+		%>
+				<tr>
+				<td><%=customer.getEmail()%></td>
+				<td><%= users.get(i)[1] %></td>
+				</tr>
+		<% }
+		 %>
+		 <%}
+			}%>
+				</tbody>
+			</table>
+
+	
 	
 	
 	
