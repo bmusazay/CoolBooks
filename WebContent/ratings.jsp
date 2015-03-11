@@ -1,20 +1,23 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 
-<%@ page import="data.dbConnect.BookDatabase" %>
+<%@ page import="data.dbConnect.RatingDB" %>
+<%@ page import="rating.Rating" %>
 <%@ page import="book.Book" %>
 <%@ page import="user.User" %>
 <%@ page import="java.util.*" %>
 
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
-	<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	<style type="text/css">
 	
 	body {
     	background-image: url('http://i.imgur.com/4K8qUHG.jpg'), url('http://i.imgur.com/EX0x72e.jpg');
     	background-repeat: no-repeat, repeat;
-    	margin: 0;
+    	margin-top: 250px;
+    	margin-left: 100px;
 	    padding: 0;
 	}
 	
@@ -29,9 +32,10 @@
 		color: #FF0000;
 	}
 	
-	h4 {
+	h3 {
 		font-family: 'Verdana', 'Geneva', sans-serif;
 		color: #FFFFFF;
+		font-size: 40px;
 	}
 	
 	a {
@@ -112,10 +116,10 @@
 	#loginout { float: right; }
 	#account { float: right; margin-top: 10px;}
 	
-	table, tr { color: #FFFFFF; border-collapse: collapse; border: 1px solid #FFFFFF; }
+	table, th, td { color: #FFFFFF; border-collapse: collapse; border: 1px solid #FFFFFF; }
 
 	
-	#books { margin-top: 250px; margin-left: 200px; width: 75%;} 
+	#books { width: 95%;} 
 	#bookPic { width: 25%;}
 	#info { width: 75%; }
 	#image { width: 150px; height: 199px; margin: 25px;}
@@ -126,108 +130,83 @@
 	#pageNumber { float: right; font-family: 'Verdana', 'Geneva', sans-serif; font-size: 15px; margin-right: 10px; margin-top: 10px;}
 	
 	</style>
-	<title>Welcome to CoolBooks</title>
+	<title>Ratings</title>
 </head>
 <body>
-<%
-BookDatabase bookDB = new BookDatabase();
-ArrayList<String> categories = bookDB.selectCategories();
 
-String category = request.getParameter("category");
-String search = request.getParameter("search");
+<% 
+RatingDB ratingDB = new RatingDB();
 
-if (category == null) {
-	category = "all";
-}
+String email = (String)request.getParameter("email");
+String isbn = (String)request.getParameter("isbn");
 
-if (search == null) {
-	search = "";
-}
+ArrayList<Rating> ratings;
 
-%>
-	<form action="Search" method="post" id="search">
-	
-		<select name="category" id="category">
-			<option value="all">All</option>
-			<%
-			for(int i = 0; i < categories.size(); i++) {
-			%>
-  			<option value="<%=categories.get(i)%>"
-  			<%
-	  			if (category != null 
-	  			&& category.equals(categories.get(i))) {%>
-	  			 	selected
-	  			<%}%>
-  			><%=categories.get(i)%></option>
-			<%}%>
-		</select>
-	
-		<input type="submit" value="Search" id="searchbutton"/>
-			<input type="text"  name="search" id="searchfield" 
-			  <%
-	  			if (search != null) {%>
-	  			value="<%=search%>"
-	  			<%}%>/>
-
-	</form>
-	
-	 <selection id="user">
-	<%
-	if (session.getAttribute("userInstance") == null) {%>
-		<form action="loginForm.jsp" method="post">	
-			<input type="submit" value="Login" id="loginout"/>
-		</form>
-	<%} else {%>
-		<form action="Logout" method="post">	
-			<input type="submit" value="Logout" id="loginout"/>
-		</form>
-		<%User user = (User)session.getAttribute("userInstance");
-		  String email = user.getEmail();%>
-		<form action="accountPage.jsp" method="post">	
-			<input type="submit" value="Logged in as <%=email%>" id="account"/>
-		</form>
-	<%}%>
-	</selection>
-	<%
-	ArrayList<Book> books = bookDB.selectBooks(search, category);
-	if (books.size() != 0) {
-	%>
-			<table id="books">
-				<tbody>
-<%
-
-int pageNo;
-if (request.getParameter("page") == null) {
-	pageNo = 1;
+if (email != null && email.length() != 0) {
+	isbn = "";
+	%><h3>Ratings for user: <%=email%></h3> <%
+	ratings = ratingDB.getUserRatings(email);
+} else if (isbn != null && isbn.length() != 0) {
+	email = "";
+	%><h3>Ratings for book: <%=isbn%></h3> <%
+	ratings = ratingDB.getBookRatings(isbn);
 } else {
-	pageNo = Integer.parseInt((String)request.getParameter("page"));
+	isbn = "";
+	email = "";
+	%><h3>All ratings: <%=isbn%></h3> <%
+	ratings = ratingDB.getAllRatings();
 }
-int maxNo = books.size();
-int maxPerPage = 10;
-for(int i = (pageNo - 1) * maxPerPage; i < (pageNo - 1) * maxPerPage + maxPerPage; i++){
-	if (i < books.size()) {
-		Book book = books.get(i);
-%>
-				<tr>
-				<td id="bookPic"><a href="Product.jsp?isbn=<%=book.getIsbn()%>"><img id="image" src='./BookImages/<%=book.getIsbn() %>.png'/><br></a></td>
-				<td id="info"><h1><a href="Product.jsp?isbn=<%=book.getIsbn()%>"><%=book.getTitle()%> 
-															<%if (book.getTitle().length() >= 49) { %>...<%} %></a></h1>
-					<p><b><%=book.getAuthor() %></b></p>
-					<p>$<%=book.getPrice() %></p>
-					<p><%=book.getInventory()%> left in stock</p></td>
-				
-				</tr>
-<% }
-}%>
+
+if (ratings.size() != 0) { %>
+	<table id="books">
+		<thead>
+			<tr>
+				<th>Date</th>
+						<% if (email.length() == 0) {%>
+							<th>Email</th>
+						<%}%>
+						<% if (isbn.length() == 0) {%>
+							<th>ISBN</th>
+						<%}%>
+				<th>Rating</th>
+				<th>Review</th>
+			</tr>
+		</thead>
+		<tbody>
+  <%int pageNo;
+	if (request.getParameter("page") == null) {
+		pageNo = 1;
+	} else {
+		pageNo = Integer.parseInt((String)request.getParameter("page"));
+	}
+	int maxNo = ratings.size() - 1;
+	int maxPerPage = 20;
+	for(int i = (pageNo - 1) * maxPerPage; i < (pageNo - 1) * maxPerPage + maxPerPage; i++){
+		if (i < ratings.size()) {
+			Rating rating = ratings.get(i);
+	%>
+					<tr>
+						<td><%=ratings.get(i).getReviewDate()%></td>
+						<% if (email.length() == 0) {%>
+							<td><%=ratings.get(i).getEmail()%></td>
+						<%}%>
+						<% if (isbn.length() == 0) {%>
+							<td><%=ratings.get(i).getIsbn()%></td>
+						<%}%>
+						<td><%=ratings.get(i).getRating()%></td>
+						<td><%=ratings.get(i).getReview()%></td>
+					</tr>
+	<% }
+	}%>
 				</tbody>
 			</table>
 <section id="page">
 	<%if (pageNo * maxPerPage > maxNo) { %>
-		<form action="front.jsp?search=<%=search%>&category=<%=category%>&page=<%=pageNo + 1%>" method="post">	
+		<form action="ratings.jsp?email=<%=email%>&isbn=<%=isbn%>&page=<%=pageNo + 1%>" method="post">	
 			<input type="submit" value="Next Page" id="next" disabled/>
 		</form>
 	<%} else { %>
-		<form action="front.jsp?search=<%=search%>&category=<%=category%>&page=<%=pageNo + 1%>" method="post">	
+		<form action="ratings.jsp?email=<%=email%>&isbn=<%=isbn%>&page=<%=pageNo + 1%>" method="post">	
 			<input type="submit" value="Next Page" id="next"/>
 		</form>
 	<%}%>
@@ -235,18 +214,20 @@ for(int i = (pageNo - 1) * maxPerPage; i < (pageNo - 1) * maxPerPage + maxPerPag
 	<h4 id="pageNumber"> Page <%=pageNo%> / <%=maxNo / maxPerPage + 1%> </h4>
 	
 	<%if (pageNo - 1 < 1) { %>
-		<form action="front.jsp?search=<%=search%>&category=<%=category%>&page=<%=pageNo - 1%>" method="post">		
+		<form action="ratings.jsp?email=<%=email%>&isbn=<%=isbn%>&page=<%=pageNo - 1%>" method="post">		
 			<input type="submit" value="Previous Page" id="previous" disabled/>
 		</form>
 	<%} else { %>
-		<form action="front.jsp?search=<%=search%>&category=<%=category%>&page=<%=pageNo - 1%>" method="post">	
+		<form action="ratings.jsp?email=<%=email%>&isbn=<%=isbn%>&page=<%=pageNo - 1%>" method="post">	
 			<input type="submit" value="Previous Page" id="previous"/>
 		</form>
 	<%}
 } else {%>
-	<h2>Your search "<%=search%>" did not match any books in category "<%=category%>".</h2>
+	<h2>No ratings.</h2>
 <%}%>
 
 </section>
+
+
 </body>
 </html>
