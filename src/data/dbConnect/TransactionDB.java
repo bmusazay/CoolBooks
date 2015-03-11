@@ -105,10 +105,7 @@ public class TransactionDB {
 		return orderNumber;
 	}
 	
-<<<<<<< HEAD
 
-=======
->>>>>>> mhsaleh2
 	public ArrayList<Transaction> getTransactions(String email) {
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -133,11 +130,6 @@ public class TransactionDB {
 					transaction.setTotal(Double.parseDouble(rs.getString(5)));
 					transactions.add(transaction);
 				}
-<<<<<<< HEAD
-			
-=======
-				
->>>>>>> mhsaleh2
 			}
 		}catch(SQLException e){
 			for(Throwable t: e){	
@@ -161,31 +153,10 @@ public class TransactionDB {
 		    }
 		}
 		return transactions;
+	
 	}
-<<<<<<< HEAD
-}
-=======
->>>>>>> mhsaleh2
-	
-	
-	/*
-	 * 2
-		o Maintain the aggregate sales and profit of the store weekly and monthly.
-		 Then, compare the value change (i.e. increase/decrease) of sales and profit 
-		 with the previous week and month. 
-		 o Maintain weekly the top 10 bestsellers of the entire store and the top 5
-		  bestsellers of each category. Also main the list of the most favorite books bi-‐‐weekly. 
-		 o Develop a direct marketing data; for each product category, a list of customers 
-		 that buy theproduct more than 2 times per month. 
-		 o Other interesting summary data that you will come up with. 
-	 * */
-	 
-<<<<<<< HEAD
-	
-	
 
 
-=======
 	public double getSales(String period)
 	{
 		Boolean previousTotalFlag = false;
@@ -440,6 +411,4 @@ public class TransactionDB {
 		}	
 		return customer;
 	}
-	
 }
->>>>>>> mhsaleh2

@@ -1,9 +1,9 @@
 package purchase;
 
 import java.io.IOException;
+import java.util.Date;
 
 import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +14,6 @@ import book.Book;
 import data.dbConnect.*;
 import transaction.Transaction;
 import user.User;
-import java.util.Date;
 
 /**
  * Servlet implementation class Purchase
@@ -47,22 +46,19 @@ public class Purchase extends HttpServlet {
 		
 		//Book book = (Book)request.getAttribute("book");
 		HttpSession ses = request.getSession();
-		if (ses.getAttribute("userInstance") == null)
+		User user = (User)ses.getAttribute("userInstance");
+		if (user == null)
 		{
 			//not logged in FIX
 			response.sendRedirect("../CoolBooks/test.html");
-			
-		} else {
+		}
+		Book book = (Book)ses.getAttribute("bookInstance");
 		
-		
-			User user = (User)ses.getAttribute("userInstance");
-			Book book = (Book)ses.getAttribute("bookInstance");
-			
-			if( book.getInventory() > 0)
+		if( book.getInventory() > 0)
+		{
+			BookDatabase db = new BookDatabase();
+			if (db.purchaseBook(book, 1) > 0) 
 			{
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
 				Date dt = new Date();
 				java.text.SimpleDateFormat sdf = 
 				     new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -80,41 +76,19 @@ public class Purchase extends HttpServlet {
 				ses.setAttribute("transaction", tr);
 				response.sendRedirect("../CoolBooks/Confirmation.jsp");
 			} else 
-=======
->>>>>>> ahmed-branch
-				BookDatabase db = new BookDatabase();
-				if (db.purchaseBook(book, 1) > 0) 
-				{
-					Date dt = new Date();
-					java.text.SimpleDateFormat sdf = 
-					     new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-					String purchaseDate = sdf.format(dt);
-					
-					//Create transaction
-					Transaction tr = new Transaction(user.getEmail(), book.getIsbn(),
-														1, book.getPrice(), purchaseDate );
-					
-					//Upload transaction object to TransactionDB
-					TransactionDB trDB = new TransactionDB();
-					trDB.addTransaction(tr);
-					tr.setTranNumber(trDB.getOrderNumber(tr));
-
-					//Send transaction to confirmation page to display
-					ses.setAttribute("transaction", tr);
-					response.sendRedirect("../CoolBooks/Confirmation.jsp");
-				} else 
-				{
-					// error page something went wrong
-				}
-			} 
-			else 
-<<<<<<< HEAD
-=======
->>>>>>> origin/mhsaleh
->>>>>>> ahmed-branch
 			{
-				//not in stock
+				HttpSession session = request.getSession();
+				session.setAttribute("purchased", false);
+				response.sendRedirect(request.getHeader("referer"));
 			}
+			
+		} else 
+		{
+			HttpSession session = request.getSession();
+			session.setAttribute("purchased", false);
+			response.sendRedirect(request.getHeader("referer"));
 		}
+		
 	}
+
 }
