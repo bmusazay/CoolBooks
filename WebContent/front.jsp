@@ -90,7 +90,7 @@
 	}
 	
 	
-	#search { position: absolute; right: 20px; right: 150px; top: 75px; }
+	#search { position: absolute; right: 20px; right: 150px; top: 150px; }
 	
 	#category {
 	  display: inline-block;
@@ -105,10 +105,10 @@
 	  margin-right: 10px;
 	}
 	
-	#searchbutton { margin-right: 10px; }
+	#searchbutton { float:right;  margin-right: 10px; }
 	#searchfield { margin-right: 20px; padding: 4px 20px; }
 	
-	#user { width: 100px; position: absolute; right: 20px; top: 75px;}
+	#user { width: 100px; position: absolute; right: 20px; top: 150px;}
 	#loginout { float: right; }
 	#account { float: right; margin-top: 10px;}
 	
