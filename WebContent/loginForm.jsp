@@ -25,12 +25,7 @@
 		
 	h2 {
 		font-family: 'Verdana', 'Geneva', sans-serif;
-		color: #FFFFFF;
-	}
-		
-	h3 {
-		font-family: 'Verdana', 'Geneva', sans-serif;
-		color: #FFFFFF;
+		color: #FF0000;
 	}
 	
 	label {
@@ -69,13 +64,13 @@
 	  background-color: #0066FF;
 	  color: #f3dad1;
 	  cursor: pointer;
-	  top: 1px;
 	}
 	
 	#link {
 	  color: #FFFFFF;
 	  font-family: 'Verdana', 'Geneva', sans-serifS;
 	  font-size: 15px;
+	  margin: 80px;
 	}
 	
 	</style>
@@ -106,7 +101,7 @@
 		
 		<input type="submit" value="Login" id="submit"/>
 		
-		<a href="signUpForm.jsp" id="link"> Register an account </a>
+		<a href="signUpForm.jsp" id="link">Register an account</a>
 	
 	</form>
 </body>
