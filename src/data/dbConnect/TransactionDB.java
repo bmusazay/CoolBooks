@@ -248,7 +248,7 @@ public class TransactionDB {
 			if(conn != null){
 				stmt = conn.createStatement();
 				
-				String strQuery = "select isbn from (select isbn, COUNT(*) as count FROM" + 
+				String strQuery = "select isbn from (select isbn, COUNT(*) as count FROM " + 
 							"Transactions GROUP BY isbn ORDER BY count DESC) AS TopTen ORDER BY " +
 							"count DESC LIMIT 10;";
 				
