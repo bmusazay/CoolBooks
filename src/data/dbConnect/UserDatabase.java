@@ -2,6 +2,7 @@ package data.dbConnect;
 
 import java.sql.*;
 
+import book.Book;
 import user.User;
 import data.dbConnect.DBConnectionPool;
 
@@ -251,6 +252,59 @@ public class UserDatabase {
 		    }
 		}
 		return isAdmin;
+	}
+	
+	public int updateField(String field, String value, String email)
+	{
+		boolean registered = true;
+		Statement stmt = null;
+		int resultNo = 0;
+		ResultSet rs = null;
+		Connection conn = null;
+		try{
+
+			conn = connPool.getConnection();
+			if(conn != null){
+				stmt = conn.createStatement();	
+				
+				/*if (field.equals("email"))
+				{
+					String strQuery = "select email from Account where email = '"+ value +"'";
+					
+					rs = stmt.executeQuery(strQuery);
+					while (rs.next()) {
+						registered = false;
+						return registered;
+					}
+				}*/
+				
+				
+				String strQuery = "update Account set " + field + " = '" + value + "'"+
+						" where email = '"+ email +"'"; 
+				resultNo = stmt.executeUpdate(strQuery);
+			}
+		}catch(SQLException e){
+			for(Throwable t: e){	
+				t.printStackTrace();
+			}
+		} catch (Exception et) {
+			et.printStackTrace();
+		}finally {
+		    try {
+		    	if (rs != null){
+		            rs.close();
+		        }
+		    	if (stmt != null){
+		            stmt.close();
+		        }
+		        if (conn != null) {
+		            connPool.returnConnection(conn);
+		        }
+		    }catch(Exception e){
+		    	 System.err.println(e);
+		    }
+		}
+		return resultNo;
 	}
 	
 	
