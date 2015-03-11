@@ -155,6 +155,55 @@ public class TransactionDB {
 		return transactions;
 	}
 	
+	public ArrayList<Transaction> getAllTransactions() {
+		Statement stmt = null;
+		ResultSet rs = null;
+		Connection conn = null;
+		ArrayList<Transaction> transactions = new ArrayList<>();
+		
+		try{
+			conn = connPool.getConnection();
+			
+			if(conn != null){
+				stmt = conn.createStatement();
+				
+				String strQuery = "select orderNumber, purchaseDate, isbn, "
+						        + "quantity, total from transactions;";
+				rs = stmt.executeQuery(strQuery);
+				while(rs.next()){
+					Transaction transaction = new Transaction();
+					transaction.setTranNumber(Integer.parseInt(rs.getString(1)));
+					transaction.setTranDate(rs.getString(2));
+					transaction.setIsbn(rs.getString(3));
+					transaction.setQuantity(Integer.parseInt(rs.getString(4)));
+					transaction.setTotal(Double.parseDouble(rs.getString(5)));
+					transactions.add(transaction);
+				}
+				
+			}
+		}catch(SQLException e){
+			for(Throwable t: e){	
+				t.printStackTrace();
+			}
+		} catch (Exception et) {
+			et.printStackTrace();
+		}finally {
+		    try {
+		    	if (rs != null){
+		            rs.close();
+		        }
+		    	if (stmt != null){
+		            stmt.close();
+		        }
+		        if (conn != null) {
+		            connPool.returnConnection(conn);
+		        }
+		    }catch(Exception e){
+		    	 System.err.println(e);
+		    }
+		}
+		return transactions;
+	}
 	
 	/*
 	 * 2
@@ -162,7 +211,7 @@ public class TransactionDB {
 		 Then, compare the value change (i.e. increase/decrease) of sales and profit 
 		 with the previous week and month. 
 		 o Maintain weekly the top 10 bestsellers of the entire store and the top 5
-		  bestsellers of each category. Also main the list of the most favorite books bi-‐‐weekly. 
+		  bestsellers of each category. Also main the list of the most favorite books bi-â€�â€�weekly. 
 		 o Develop a direct marketing data; for each product category, a list of customers 
 		 that buy theproduct more than 2 times per month. 
 		 o Other interesting summary data that you will come up with. 
