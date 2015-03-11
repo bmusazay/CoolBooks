@@ -168,7 +168,7 @@ public class TransactionDB {
 				stmt = conn.createStatement();
 				
 				String strQuery = "select orderNumber, purchaseDate, isbn, "
-						        + "quantity, total from transactions;";
+						        + "quantity, total, email from transactions;";
 				rs = stmt.executeQuery(strQuery);
 				while(rs.next()){
 					Transaction transaction = new Transaction();
@@ -177,6 +177,7 @@ public class TransactionDB {
 					transaction.setIsbn(rs.getString(3));
 					transaction.setQuantity(Integer.parseInt(rs.getString(4)));
 					transaction.setTotal(Double.parseDouble(rs.getString(5)));
+					transaction.setEmail(rs.getString(6));
 					transactions.add(transaction);
 				}
 				
