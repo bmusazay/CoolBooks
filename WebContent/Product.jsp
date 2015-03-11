@@ -84,6 +84,8 @@
    		border: 1px solid #666;
 	}
 	
+	#similar {margin-left: 200px;}
+	
 	#link {
 	  color: #FFFFFF;
 	  font-family: 'Verdana', 'Geneva', sans-serifS;
@@ -98,9 +100,8 @@
 	
 	#search { position: absolute; right: 20px; right: 150px; top: 75px; }
 	
-	#category {
-	  display: inline-block;
-      vertical-align: top;
+	
+	#rating {
 	  background-color: #99CCFF;
 	  color: #666;
 	  font-family: 'Verdana', 'Geneva', sans-serif;
@@ -108,8 +109,17 @@
 	  border: 1px solid #FFFFFF;
 	  padding: 6px 4px;
 	  border-radius: 3px;
-	  margin-right: 10px;
+	  float: left;
+	  margin: 5px;
 	}
+	
+	#rate { margin: 5px; float: left;}
+	
+	#review { float: left; margin: 8px; width: 330px}
+	#reviewdiv { width: 100px;}
+	#submitReview {float: right; margin-right: 90px;}
+	
+	#purchase { margin: 5px; float: left;}
 	
 	#searchbutton { margin-right: 10px; }
 	#searchfield { margin-right: 5px; padding: 4px 20px; }
@@ -120,7 +130,7 @@
 	
 	table, tr { color: #FFFFFF; border-collapse: collapse; border: 1px solid #FFFFFF;}
 	
-	#books { margin-top: 250px; margin-left: 200px; margin-bottom: 100px; width: 75%;} 
+	#books { margin-top: 5px; margin-left: 200px; margin-bottom: 100px; width: 75%;} 
 	#bookPic { width: 25%;}
 	#info { width: 75%; }
 	#image { width: 150px; height: 199px; margin: 25px;}
@@ -175,44 +185,58 @@
 	
 	
 	if (user == null) {
-		session.setAttribute("referer", "Product.jsp?isbn=" + book.getIsbn());
 	%>
 		<form action="loginForm.jsp" method="post">	
-			<input type="submit" value="Login to buy and rate." id="login"/>
+			<input type="submit" value="Login to rate and purchase" id="login"/>
 		</form>
 	<%} else {
 		if (book.getInventory() > 0) {%>
 			<form action="Purchase" method="post">
-				<input type="submit" value="Purchase" id="submit"/>
+				<input type="submit" value="Purchase" id="purchase"/>
 			</form>
 		<%} else {%>
 			<form action="Purchase" method="post">
-				<input type="submit" value="Out of Stock" id="submit" disabled/>
+				<input type="submit" value="Out of Stock" id="purchase" disabled/>
 			</form>
 		<%}
 		
 		RatingDB ratingDB = new RatingDB();
-		boolean rated = ratingDB.alreadyRated(user.getEmail());
-		
+		boolean rated = ratingDB.alreadyRated(user.getEmail(), book.getIsbn());
 		if (rated) {%>
-			<form action="addRating" method="post">
-				<input type="radio" name="rating" value="1">
-				<input type="radio" name="rating" value="2">
-				<input type="radio" name="rating" value="3">
-				<input type="radio" name="rating" value="4">
-				<input type="radio" name="rating" value="5">
-				<br>
-				<textarea name="review" cols="25" rows="7"></textarea> 
-		        <br />
-				<input type="submit" value="Add Review" id="submitReview"/>
-			</form>
-		<%}
-	}%></td>
+		<form action="addRating" method="post">
+			<input type="submit" value="Rate" id="rate"/>
+			<select id="rating" name="rating">
+			  <option value="1">1</option>
+			  <option value="1">1</option>
+			  <option value="2">2</option>
+			  <option value="3">3</option>
+			  <option value="4">4</option>
+			  <option value="5">5</option>
+			  <option value="6">6</option>
+			  <option value="7">7</option>
+			  <option value="8">8</option>
+			  <option value="9">9</option>
+			  <option value="10">10</option>
+			</select>
+			<div id="reviewdiv">
+				<textarea name="review" id="review" required="required"></textarea> 
+			</div>
+		</form> 
+		<%} else {%>
+		<form action="addRating" method="post">
+			<input type="submit" value="Rate" id="rate" disabled/>
+		</form> 
+	<% }
+	}%>
 	
-	
+		<form action="ratings.jsp" method="post">
+			<input type="submit" value="View Ratings" id="rate"/>
+		</form> </td>
+
 	</tr>
 	</tbody>
 </table>
+
 	<table>
 	<thead>
 		<tr>
@@ -224,7 +248,7 @@
 	</thead>
 	<tbody>
 <%
-	RatingDB ratingDB = new RatingDB();
+    RatingDB ratingDB = new RatingDB();
 	ArrayList<Rating> ratings = ratingDB.getBookRatings(book.getIsbn());
 	
 	for(int i = 0; i < ratings.size(); i++){
@@ -239,9 +263,14 @@
 	</tbody>
 	
 </table>
-<%
+
+
+<% 
+
 ArrayList<Book> books = bookDB.selectBooks("", book.getCategory());
 if (books.size() != 0) { %>
+
+		<h4 id="similar">Similar Books:</h4>
 			<table id="books">
 				<tbody>
 <%

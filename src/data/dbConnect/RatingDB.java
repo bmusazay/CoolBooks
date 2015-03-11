@@ -23,7 +23,7 @@ public class RatingDB {
 		return connPool;
 	}
 	
-	public boolean alreadyRated(String email)
+	public boolean alreadyRated(String email, String isbn)
 	{
 		Statement stmt = null;
 		Connection conn = null;
@@ -37,7 +37,7 @@ public class RatingDB {
 			if(conn != null){
 				stmt = conn.createStatement();
 				
-				String strQuery = "select email from ratings where email = '"+ email +"'";
+				String strQuery = "select email from ratings where email = '"+ email +"' and isbn = '"+ isbn +"';";
 				
 				rs = stmt.executeQuery(strQuery);
 				while (rs.next()) {

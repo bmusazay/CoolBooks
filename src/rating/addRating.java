@@ -68,7 +68,7 @@ public class addRating extends HttpServlet {
 			Rating rating = new Rating(user.getEmail(), book.getIsbn(), ratingValue, review, reviewDate);
 			RatingDB rDB = new RatingDB();
 			BookDatabase bDB = new BookDatabase();
-			if (rDB.alreadyRated(user.getEmail()))
+			if (rDB.alreadyRated(user.getEmail(), book.getIsbn()))
 			{
 				rDB.addRating(rating);
 				bDB.addRating(ratingValue,  book.getIsbn());

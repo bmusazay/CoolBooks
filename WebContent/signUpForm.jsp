@@ -55,7 +55,7 @@
 	
 	input[type='submit'], a.add {
 	  background-color: #0A193A;
-	  color: #f3dad1;
+	  color: #FFFFFF;
 	  border: 1px solid #FFFFFF;
 	  border-radius: 5px;
 	  padding: 8px 30px;
