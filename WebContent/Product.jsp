@@ -229,39 +229,12 @@
 	<% }
 	}%>
 	
-		<form action="ratings.jsp" method="post">
+		<form action="ratings.jsp?isbn=<%=isbn%>" method="post">
 			<input type="submit" value="View Ratings" id="rate"/>
 		</form> </td>
 
 	</tr>
 	</tbody>
-</table>
-
-	<table>
-	<thead>
-		<tr>
-			<th>Review Date</th>
-			<th>User</th>
-			<th>Review</th>
-			<th>Rating</th>
-		</tr>
-	</thead>
-	<tbody>
-<%
-    RatingDB ratingDB = new RatingDB();
-	ArrayList<Rating> ratings = ratingDB.getBookRatings(book.getIsbn());
-	
-	for(int i = 0; i < ratings.size(); i++){
-		out.println("<tr>");
-		out.println("<td>"+ratings.get(i).getReviewDate()+"</td>");
-		out.println("<td>"+ratings.get(i).getEmail()+"</td>");
-		out.println("<td>"+ratings.get(i).getReview()+"</td>");
-		out.println("<td>"+ratings.get(i).getRating()+"</td>");
-		out.println("</tr>");
-	}
-%>
-	</tbody>
-	
 </table>
 
 
