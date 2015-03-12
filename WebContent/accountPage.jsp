@@ -12,21 +12,62 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
-<title>Insert title here</title>
+<title>Your Account</title>
 <link rel="stylesheet" href="css/c06.css"/>
 </head>
 <body>
 
 <%
-		
+	String status = request.getParameter("status");
 	User sessionUser = (User)session.getAttribute("userInstance");
 	if (sessionUser != null) {
 		UserDatabase userDB = new UserDatabase();
 		User tempUser = userDB.selectUser(sessionUser.getEmail());
 		out.println("<h1> Email:"+tempUser.getEmail()+"<h1>");
 		out.println("<h1> First Name:"+tempUser.getFName()+"<h1>");
-		out.println("<h1> Last Name:"+tempUser.getLName()+"<h1>");		
-%>
+		out.println("<h1> Last Name:"+tempUser.getLName()+"<h1>");
+		%>
+		<form action="UpdateUser" name="form1" id="form1" method="post">
+		
+		<h1>Update Credentials</h1>
+		<%
+			if (status!= null)
+			{
+				%>
+				<font color="green">Successfully changed.</font>
+				<% 
+			}
+		%>
+		
+		<%if (session.getAttribute("signup") != null && !(boolean)session.getAttribute("signup")) {
+			session.removeAttribute("signup");%>
+			<h2>This email is already associated with an account. Please select a different email.</h2>
+		<%}%>
+		
+		<input type="hidden" name="oldEmail" value="<%=tempUser.getEmail()%>">
+		<div>
+			<label> Password : </label>
+			<input type="password" name="pass" id="pass" required="required"/>
+		</div>
+		
+		<div> 
+			<label> Confirm Password : </label>
+			<input type="password" name="repass" id="repass" required="required"/>
+		</div>
+			<div> <label> First Name : </label>
+			<input type="text" value="<%= tempUser.getFName() %>"name="fname" id="fname" required="required"/>
+		</div>
+			<div> <label> Last Name : </label>
+			<input type="text" value="<%= tempUser.getLName() %>"name="lname" id="lname" required="required"/>
+		</div>
+		
+		<input type="submit" value="Update Account" id="submit"/>
+	
+	</form>
+		
+	<br>
+	
+	
 	<table>
 		<thead>
 			<tr>
