@@ -45,7 +45,7 @@
 	#userTable{margin-left: 350px;}
 	#analyt { float: left; margin-right: 100px;}
 	#loginout {float: left;}
-	
+	#books { margin-top: 5px; margin-left: 100px; margin-bottom: 20px; width: 75%;} 
 	fileup {
 		color: #FFFFFF;
 	}
@@ -131,7 +131,7 @@
 	</form>
 
 	<form action="CreateProduct.jsp" method = "post" enctype="multipart/form-data"> 
-	 <label>Isbn: </label> <input type="text" name="isbn" /> <br>
+	 <label>Isbn: </label> <input type="text" name="Isbn" /> <br>
 	 <label>Title: </label><input type="text" name="Title" /> <br>
 	 <label>Author: </label><input type="text" name="Author" /> <br>
 	<label> Publish Year: </label><input type="text" name="PublishYear" /> <br>
@@ -184,7 +184,7 @@
 		UserDatabase uDB = new UserDatabase();
 		User user = uDB.selectUser(email);
 		%>
-		<table id="userTable">
+		<table id="books">
 				<thead>
 					<tr>
 						<th>Email</th>
@@ -228,7 +228,7 @@
 		
 		%>
 		  <br>
-		 <input type="submit" value="Remove Book" />
+		 <input type="submit" value="Update Book" />
 	</form>
 	
 	<%

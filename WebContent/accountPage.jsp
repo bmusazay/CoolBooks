@@ -17,7 +17,7 @@
 	body {
     	background-image: url('http://i.imgur.com/4K8qUHG.jpg'), url('http://i.imgur.com/EX0x72e.jpg');
     	background-repeat: no-repeat, repeat;
-    	margin-left: 500px;
+    	margin-left: 350px;
 	    padding: 0;
 	}
 	

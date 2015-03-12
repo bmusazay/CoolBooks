@@ -289,7 +289,7 @@
 			if (users.size() != 0) 
 			{
 	%>
-		<table>
+		<table id="books">
 				<thead>
 					<tr>
 						<th>Email</th>

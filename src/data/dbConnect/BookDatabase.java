@@ -222,10 +222,10 @@ public class BookDatabase {
 			if(conn != null){
 				stmt = conn.createStatement();
 
-				String strQuery = "insert Book(isbn, title, inventory_amount, price, category, author, publish_year) " + 
+				String strQuery = "insert Book(isbn, title, inventory_amount, price, category, author, publish_year, rating, numRatings) " + 
 				"values ('" + book.getIsbn() + "', '" + book.getTitle() +"', " + book.getInventory() + ", " + 
 						book.getPrice() + ", '" + book.getCategory() + "', '" + book.getAuthor() + "', " + book.getYear() 
-						+ ");"; 
+						+ ", 0.0, 0);"; 
 				
 				stmt.executeUpdate(strQuery);
 
