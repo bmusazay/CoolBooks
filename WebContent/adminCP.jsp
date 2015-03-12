@@ -7,10 +7,100 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+	<meta charset="UTF-8">
+	<style type="text/css">
+	
+	body {
+    	background-image: url('http://i.imgur.com/EX0x72e.jpg');
+    	background-repeat: repeat;
+    	margin: 0;
+	    padding: 0;
+	}
+	.header a {
+    display: block;
+    background-image: url("http://i.imgur.com/4K8qUHG.jpg");
+    background-repeat: no-repeat;
+    padding-top:200px;
+	}
+	
+	form {
+	 	width: 450px;	
+		margin: 0 auto;
+	}
+	h1 {
+		font-family: 'Verdana', 'Geneva', sans-serif;
+		color: #FFFFFF;
+		margin-left: 400px;	
+	}
+	h2 {
+		
+		font-family: 'Verdana', 'Geneva', sans-serif;
+		color: #FFFFFF;
+	}
+	h4
+	{
+		
+		font-family: 'Verdana', 'Geneva', sans-serif;
+		color: #FFFFFF;
+	}
+	table, tr { width:10%; margin-left: 150px; color: #FFFFFF; border-collapse: collapse; border: 1px solid #FFFFFF; }
+	
+	#sizeT2 {width: 25%;}
+	#userTable{margin-left: 350px;}
+	 
+	fileup {
+		color: #FFFFFF;
+	}
+	label {
+		color: #FFFFFF;
+		float: left;
+		width: 10em;
+		margin-right: 1em;
+		font-family: 'Verdana', 'Geneva', sans-serif;
+	  	font-size: 15px;
+	}
+	input[type='text'], input[type='password'], textarea {
+	  background-color: #99CCFF;
+	  color: #666;
+	  font-family: 'Verdana', 'Geneva', sans-serif;
+	  font-size: 25px;
+	  padding: 4px 6px;
+	  border: 1px solid #FFFFFF;
+	  margin-bottom:5px;
+	  border-radius: 3px;
+	}
+	input[type='submit'], a.add {
+	  background-color: #0A193A;
+	  color: #FFFFFF;
+	  border: 1px solid #FFFFFF;
+	  border-radius: 5px;
+	  padding: 8px 30px;
+	  float: left;
+	  font-size: 18px;
+	  text-decoration: none;
+	  text-transform: uppercase;
+	}
+	
+	input[type='submit']:hover, a.add:hover {
+	  background-color: #1C459E;
+	  cursor: pointer;
+	}
+	
+	
+	</style>
+	
+	
 <title>Admin Control Panel</title>
 </head>
 <body>
+
+		<div class="header">
+		    <a href="front.jsp">
+		    </a>
+		</div>
+
+
 <%
 	User sessionUser = (User)session.getAttribute("userInstance");
 	
@@ -30,20 +120,23 @@
 	<h1>Admin Control Panel</h1>
 	<form action="Analytics.jsp" name="formA" id="formA" method="post">
 		 <input type="submit" value="Analytics Page" />
-	</form>
+	</form><br><br>
 	<br>
 	<form action="CreateProduct.jsp" method = "post" enctype="multipart/form-data"> 
-	 Isbn: <input type="text" name="isbn" /> <br>
-	 Title: <input type="text" name="Title" /> <br>
-	 Author: <input type="text" name="Author" /> <br>
-	 Publish Year: <input type="text" name="PublishYear" /> <br>
-	 Category: <input type="text" name="Category" /> <br>
-	 Quantity: <input type="text" name="Quantity" /> <br>
-	 Price: <input type="text" name="Price" /> <br>
-	 <input type="file" name="file" />  <br>
+	 <label>Isbn: </label> <input type="text" name="isbn" /> <br>
+	 <label>Title: </label><input type="text" name="Title" /> <br>
+	 <label>Author: </label><input type="text" name="Author" /> <br>
+	<label> Publish Year: </label><input type="text" name="PublishYear" /> <br>
+	 <label>Category: </label><input type="text" name="Category" /> <br>
+	 <label>Quantity: </label><input type="text" name="Quantity" /> <br>
+	 <label>Price: </label><input type="text" name="Price" /> <br>
+	 <label>Upload Image: </label>
+	 <div class="fileup">
+	 	<input type="file" name="file" />  
+ 	</div>
 	 <input type="submit" value="Create Product" />
 	</form>
-	<br>
+	<br><br><br>
 	
 	
 	
@@ -59,9 +152,11 @@
 		isbn = "";
 	}
 	%>
+	
+	<br><br>
 	<form action="Update" name="form2" id="form2" method="post">
 		 <h4>Delete User</h4>
-		 User Email: <input type="text" name="email" /> 
+		 <label> User Email: </label><input type="text" name="email" /> 
 		  <%
 		if (email.equals("notfound"))
 		{
@@ -74,14 +169,14 @@
 		 <br>
 		 <input type="submit" value="Update User" />
 	</form>
-	
+	<br><br><br>
 	<%
 	if (!email.equals("") && !email.equals("null") && !email.equals("notfound") )
 	{
 		UserDatabase uDB = new UserDatabase();
 		User user = uDB.selectUser(email);
 		%>
-		<table>
+		<table id="userTable">
 				<thead>
 					<tr>
 						<th>Email</th>
@@ -95,7 +190,7 @@
 						<td><%=user.getEmail()%></td>
 						<td><%=user.getFName() %></td>
 						<td><%=user.getLName() %></td>
-						<td> 
+						<td class="sizeT"> 
 							<form action="DeleteUser" name="formD" id="formD" method="post">
 							 <input type="hidden" name="email" value="<%=user.getEmail()%>">
 							 <input type="submit" value="Delete User" />
@@ -114,7 +209,7 @@
 	
 	<form action="Update" name="form3" id="form3" method="post">
 		 <h4>Update Book</h4>
-		 Book ISBN: <input type="text" name="isbn" />
+		 <label> Book ISBN: </label><input type="text" name="isbn" />
 		 <% 
 		 if (isbn.equals("notfound"))
 		{
@@ -154,10 +249,10 @@
 							 <input type="submit" value="Update Quantity" />
 							</form>
 						</td>
-						<td> 
+						<td id="sizeT2"> 
 							<form action="DeleteBook" name="formDB" id="formDB" method="post">
 							 <input type="hidden" name="isbn" value="<%=book.getIsbn()%>">
-							 <input type="submit" value="Update Book" />
+							 <input type="submit" value="Delete Book" />
 							</form>
 						
 						</td>
@@ -165,7 +260,7 @@
 				
 				</tbody>
 		</table>
-		
+		<br><br><br><br><br>
 	<% 	
 	}
 	%>
