@@ -4,9 +4,8 @@
 <html>
 <head>
 
-<%@ page import="data.dbConnect.RatingDB" %>
-<%@ page import="data.dbConnect.BookDatabase" %>
-<%@ page import="rating.Rating" %>
+<%@ page import="data.dbConnect.TransactionDB" %>
+<%@ page import="transaction.Transaction" %>
 <%@ page import="book.Book" %>
 <%@ page import="user.User" %>
 <%@ page import="java.util.*" %>
@@ -19,7 +18,6 @@
     	background-repeat: no-repeat, repeat;
     	margin-top: 250px;
     	margin-left: 100px;
-    	margin-right: 100px;
 	    padding: 0;
 	}
 	
@@ -27,7 +25,6 @@
 		font-family: 'Verdana', 'Geneva', sans-serif;
 		color: #FFFFFF;
 		font-size: 20px;
-		margin-bottom: 30px;
 	}
 		
 	h2 {
@@ -40,7 +37,7 @@
 		color: #FFFFFF;
 		font-size: 40px;
 	}
-	
+		
 	h4 {
 		font-family: 'Verdana', 'Geneva', sans-serif;
 		color: #FFFFFF;
@@ -121,7 +118,7 @@
 	#searchfield { margin-right: 20px; padding: 4px 20px; }
 	
 	#user { width: 100px; position: absolute; right: 20px; top: 75px;}
-	#loginout { float: right; }
+	#loginout { float: right; margin-right: 100px;}
 	#account { float: right; margin-top: 10px;}
 	
 	table, th, td { color: #FFFFFF; border-collapse: collapse; border: 1px solid #FFFFFF; }
@@ -138,56 +135,42 @@
 	#pageNumber { float: right; font-family: 'Verdana', 'Geneva', sans-serif; font-size: 15px; margin-right: 10px; margin-top: 10px;}
 	
 	</style>
-	<title>Ratings</title>
+	<title>Transactions</title>
 </head>
 <body>
 
-
 <% 
-RatingDB ratingDB = new RatingDB();
+TransactionDB transactionDB = new TransactionDB();
 
 String email = (String)request.getParameter("email");
-String isbn = (String)request.getParameter("isbn");
-		
-ArrayList<Rating> ratings;
+
+ArrayList<Transaction> transactions;
 
 if (email != null && email.length() != 0) {
-	isbn = "";
 	%><form action="accountPage.jsp" method="post">	
 		<input type="submit" value="Return to Account Page" id="loginout"/>
 	</form><%
-	%><h3>Ratings for user: <%=email%></h3> <%
-	ratings = ratingDB.getUserRatings(email);
-} else if (isbn != null && isbn.length() != 0) {
-	email = "";
-	BookDatabase bookDB = new BookDatabase();
-	ratings = ratingDB.getBookRatings(isbn);
-	%><form action="Product.jsp?isbn=<%=isbn%>" method="post">	
-	<input type="submit" value="Return to Book Page" id="loginout"/>
-</form><%
-	
-	%><h3>Ratings for book: <%=bookDB.getBook(isbn).getTitle()%> <%if (bookDB.getBook(isbn).getTitle().length() >= 49) { %>...<%} %></h3> <%
-	%><h1>Average rating: <%=bookDB.getRatings(isbn)%> / 10</h1><%
+	%><h3>Transactions for User: <%=email%></h3> <%
+	transactions = transactionDB.getTransactions(email);
 } else {
-	isbn = "";
 	email = "";
-	%><h3>All ratings: <%=isbn%></h3> <%
-	ratings = ratingDB.getAllRatings();
+	%><h3>All Transactions: </h3>
+	<%
+	transactions = transactionDB.getAllTransactions();
 }
 
-if (ratings.size() != 0) { %>
+if (transactions.size() != 0) { %>
 	<table id="books">
 		<thead>
 			<tr>
+				<th>Number</th>
 				<th>Date</th>
 						<% if (email.length() == 0) {%>
 							<th>Email</th>
 						<%}%>
-						<% if (isbn.length() == 0) {%>
 							<th>ISBN</th>
-						<%}%>
-				<th>Rating</th>
-				<th>Review</th>
+				<th>Quantity</th>
+				<th>Total</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -197,22 +180,21 @@ if (ratings.size() != 0) { %>
 	} else {
 		pageNo = Integer.parseInt((String)request.getParameter("page"));
 	}
-	int maxNo = ratings.size() - 1;
+	int maxNo = transactions.size() - 1;
 	int maxPerPage = 20;
 	for(int i = (pageNo - 1) * maxPerPage; i < (pageNo - 1) * maxPerPage + maxPerPage; i++){
-		if (i < ratings.size()) {
-			Rating rating = ratings.get(i);
+		if (i < transactions.size()) {
+			Transaction transaction = transactions.get(i);
 	%>
 					<tr>
-						<td><%=ratings.get(i).getReviewDate()%></td>
+						<td><%=transactions.get(i).getTranNumber()%></td>
+						<td><%=transactions.get(i).getTranDate()%></td>
 						<% if (email.length() == 0) {%>
-							<td><%=ratings.get(i).getEmail()%></td>
+							<td><%=transactions.get(i).getEmail()%></td>
 						<%}%>
-						<% if (isbn.length() == 0) {%>
-							<td><%=ratings.get(i).getIsbn()%></td>
-						<%}%>
-						<td><%=ratings.get(i).getRating()%></td>
-						<td><%=ratings.get(i).getReview()%></td>
+						<td><%=transactions.get(i).getIsbn()%></td>
+						<td><%=transactions.get(i).getQuantity()%></td>
+						<td><%=transactions.get(i).getTotal()%></td>
 					</tr>
 	<% }
 	}%>
@@ -220,11 +202,11 @@ if (ratings.size() != 0) { %>
 			</table>
 <section id="page">
 	<%if (pageNo * maxPerPage > maxNo) { %>
-		<form action="ratings.jsp?email=<%=email%>&isbn=<%=isbn%>&page=<%=pageNo + 1%>" method="post">	
+		<form action="transactions.jsp?email=<%=email%>&page=<%=pageNo + 1%>" method="post">	
 			<input type="submit" value="Next Page" id="next" disabled/>
 		</form>
 	<%} else { %>
-		<form action="ratings.jsp?email=<%=email%>&isbn=<%=isbn%>&page=<%=pageNo + 1%>" method="post">	
+		<form action="transactions.jsp?email=<%=email%>&page=<%=pageNo + 1%>" method="post">	
 			<input type="submit" value="Next Page" id="next"/>
 		</form>
 	<%}%>
@@ -232,20 +214,19 @@ if (ratings.size() != 0) { %>
 	<h4 id="pageNumber"> Page <%=pageNo%> / <%=maxNo / maxPerPage + 1%> </h4>
 	
 	<%if (pageNo - 1 < 1) { %>
-		<form action="ratings.jsp?email=<%=email%>&isbn=<%=isbn%>&page=<%=pageNo - 1%>" method="post">		
+		<form action="transactions.jsp?email=<%=email%>&page=<%=pageNo - 1%>" method="post">		
 			<input type="submit" value="Previous Page" id="previous" disabled/>
 		</form>
 	<%} else { %>
-		<form action="ratings.jsp?email=<%=email%>&isbn=<%=isbn%>&page=<%=pageNo - 1%>" method="post">	
+		<form action="transactions.jsp?email=<%=email%>&page=<%=pageNo - 1%>" method="post">	
 			<input type="submit" value="Previous Page" id="previous"/>
 		</form>
 	<%}
 } else {%>
-	<h2>No ratings.</h2>
+	<h2>No transactions.</h2>
 <%}%>
 
 </section>
-
 
 </body>
 </html>

@@ -27,6 +27,8 @@
 	h2 {
 		font-family: 'Verdana', 'Geneva', sans-serif;
 		color: #FF0000;
+		margin-top: 250px;
+		margin-left: 100px;
 	}
 	
 	h4 {
@@ -89,8 +91,7 @@
 	  margin: 80px;
 	}
 	
-	
-	#search { position: absolute; right: 20px; right: 150px; top: 150px; }
+	#search { position: absolute; right: 20px; right: 350px; top: 200px; }
 	
 	#category {
 	  display: inline-block;
@@ -108,14 +109,14 @@
 	#searchbutton { float:right;  margin-right: 10px; }
 	#searchfield { margin-right: 20px; padding: 4px 20px; }
 	
-	#user { width: 100px; position: absolute; right: 20px; top: 150px;}
+	#user { width: 100px; position: absolute; right: 200px; top: 200px;}
 	#loginout { float: right; }
 	#account { float: right; margin-top: 10px;}
 	
 	table, tr { color: #FFFFFF; border-collapse: collapse; border: 1px solid #FFFFFF; }
 
 	
-	#books { margin-top: 250px; margin-left: 200px; width: 75%;} 
+	#books { margin-top: 325px; margin-left: 200px; width: 75%;} 
 	#bookPic { width: 25%;}
 	#info { width: 75%; }
 	#image { width: 150px; height: 199px; margin: 25px;}
@@ -214,7 +215,8 @@ for(int i = (pageNo - 1) * maxPerPage; i < (pageNo - 1) * maxPerPage + maxPerPag
 															<%if (book.getTitle().length() >= 49) { %>...<%} %></a></h1>
 					<p><b><%=book.getAuthor() %></b></p>
 					<p>$<%=book.getPrice() %></p>
-					<p><%=book.getInventory()%> left in stock</p></td>
+					<p><%=book.getInventory()%> left in stock</p>
+					<p><%=bookDB.getRatings(book.getIsbn())%> / 10</p></td>
 				
 				</tr>
 <% }

@@ -35,7 +35,7 @@ public class BookDatabase {
 			conn = connPool.getConnection();
 			if(conn != null){
 				stmt = conn.createStatement();	
-				String strQuery = "update Book set inventory_amount = inventory_amount - 1" +
+				String strQuery = "update Book set inventory_amount = inventory_amount - " + quantity  +
 						" where isbn = '"+ book.getIsbn() +"' and inventory_amount > 0"; 
 				resultNo = stmt.executeUpdate(strQuery);
 			}
@@ -125,11 +125,11 @@ public class BookDatabase {
 				if (category == null || category.equals("all")) {
 					strQuery = "select isbn, title, author, price, category, inventory_amount from book "
 					         + "where title like '%" + search + "%' or author like '%" + search + "%'"
-					         + "or isbn like '%" + search + "%';";
+					         + "or isbn like '%" + search + "%' order by rating desc;";
 				} else {
 					strQuery = "select isbn, title, author, price, category, inventory_amount from book "
 					         + "where (title like '%" + search + "%' or author like '%" + search + "%'"
-					         + "or isbn like '%" + search + "%') and category = '" + category + "';";
+					         + "or isbn like '%" + search + "%') and category = '" + category + "' order by rating desc;";
 				}
 				
 				rs = stmt.executeQuery(strQuery);

@@ -17,7 +17,6 @@
     	background-image: url('http://i.imgur.com/4K8qUHG.jpg'), url('http://i.imgur.com/EX0x72e.jpg');
     	background-repeat: no-repeat, repeat;
     	margin: 0;
-	    padding-top: 250px;
 	}
 	
 	h1 {
@@ -65,7 +64,7 @@
 	  color: #FFFFFF;
 	  border: 1px solid #FFFFFF;
 	  border-radius: 5px;
-	  padding: 8px 30px;
+	  padding: 8px 5px;
 	  float: left;
 	  font-size: 18px;
 	  text-decoration: none;
@@ -113,19 +112,22 @@
 	  margin: 5px;
 	}
 	
+	#buy {margin-bottom: 70px;}
 	#rate { margin: 5px; float: left;}
+	#viewrate { float: left; margin: 5px; }
 	
 	#review { float: left; margin: 8px; width: 330px}
 	#reviewdiv { width: 100px;}
 	#submitReview {float: right; margin-right: 90px;}
 	
 	#purchase { margin: 5px; float: left;}
+	#quantity { margin: 5px; float: left; width: 60px;}
 	
 	#searchbutton { margin-right: 10px; }
-	#searchfield { margin-right: 5px; padding: 4px 20px; }
 	
 	#user { width: 100px; position: absolute; right: 20px; top: 75px;}
-	#loginout { float: right; }
+	#login { margin: 5px; float: left;}
+	#loginout { float: right; margin-top: 75px; margin-bottom: 150px; margin-right: 75px;}
 	#account { float: right; margin-top: 10px;}
 	
 	table, tr { color: #FFFFFF; border-collapse: collapse; border: 1px solid #FFFFFF;}
@@ -141,7 +143,7 @@
 	#pageNumber { float: right; font-family: 'Verdana', 'Geneva', sans-serif; font-size: 15px; margin-right: 10px; margin-top: 10px;}
 	
 	</style>
-<title>Insert title here</title>
+<title>Product Page</title>
 </head>
 
 <body>
@@ -155,7 +157,12 @@
 	
 	session.setAttribute("bookInstance", book);
 	
-	%>
+	%> 		
+	
+	<form action="front.jsp" method="post">	
+		<input type="submit" value="Return to Search Page" id="loginout"/>
+	</form>
+
 	
 	<table id="book">
 	<tbody>
@@ -180,7 +187,7 @@
 	
 	if (session.getAttribute("purchased") != null && !(boolean)session.getAttribute("purchased")) {
 		session.removeAttribute("purchased");%>
-		<h2>This book is now out of stock.</h2>
+		<h2>Invalid quantity. Please try again.</h2>
 	<%}
 	
 	
@@ -189,17 +196,20 @@
 		<form action="loginForm.jsp" method="post">	
 			<input type="submit" value="Login to rate and purchase" id="login"/>
 		</form>
-	<%} else {
-		if (book.getInventory() > 0) {%>
+	<%} else {%>
+		<div id="buy">
+		<%if (book.getInventory() > 0) {%>
 			<form action="Purchase" method="post">
 				<input type="submit" value="Purchase" id="purchase"/>
+				<input type ="text"  name="quantity" id="quantity" required="required"/>
 			</form>
 		<%} else {%>
 			<form action="Purchase" method="post">
 				<input type="submit" value="Out of Stock" id="purchase" disabled/>
 			</form>
-		<%}
-		
+		<%} %>
+		</div>
+		<%
 		RatingDB ratingDB = new RatingDB();
 		boolean rated = ratingDB.alreadyRated(user.getEmail(), book.getIsbn());
 		if (rated) {%>
@@ -229,10 +239,12 @@
 	<% }
 	}%>
 	
+	<div id="viewrate">
 		<form action="ratings.jsp?isbn=<%=isbn%>" method="post">
-			<input type="submit" value="View Ratings" id="rate"/>
-		</form> </td>
-
+			<input type="submit" value="View Ratings"/>
+		</form>
+	</div>
+	 </td>
 	</tr>
 	</tbody>
 </table>
@@ -260,7 +272,8 @@ for(int i = 0; i < 6; i++){
 															<%if (tempBook.getTitle().length() >= 49) { %>...<%} %></a></h1>
 					<p><b><%=tempBook.getAuthor() %></b></p>
 					<p>$<%=tempBook.getPrice() %></p>
-					<p><%=tempBook.getInventory()%> left in stock</p></td>
+					<p><%=tempBook.getInventory()%> left in stock</p>
+					<p><%=bookDB.getRatings(tempBook.getIsbn())%> / 10</p></td>
 				
 				</tr>
 <% 		}

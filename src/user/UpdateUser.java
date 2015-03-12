@@ -1,11 +1,13 @@
 package user;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import data.dbConnect.*;
 import user.User;
@@ -38,26 +40,30 @@ public class UpdateUser extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String oldEmail = request.getParameter("oldEmail");
+		
+		HttpSession session = request.getSession();
+		User sessionUser = (User)session.getAttribute("userInstance");
+		
+		String oldEmail = sessionUser.getEmail();
 		String fname = request.getParameter("fname");
 		String lname = request.getParameter("lname");
-		String password = request.getParameter("password");
+		String passw = request.getParameter("npass");
 		UserDatabase uDB = new UserDatabase();
 		int val = 0;
 		User curUser = uDB.selectUser(oldEmail);
 		
-		if (fname != null && !curUser.getFName().equals(fname))
+		if (fname != null)
 		{
 			val = uDB.updateField("first_name", fname, oldEmail);
 		}
 		
-		if (lname != null && !curUser.getLName().equals(lname))
+		if (lname != null)
 		{
 			val = uDB.updateField("last_name", lname, oldEmail);
 		}
-		if (password != null && !curUser.getPass().equals(password))
+		if (passw != null)
 		{
-			val = uDB.updateField("pass", password, oldEmail);
+			val = uDB.updateField("pass", passw, oldEmail);
 		}
 		
 		if (val > 0)
@@ -65,5 +71,4 @@ public class UpdateUser extends HttpServlet {
 		else
 			response.sendRedirect("accountPage.jsp");
 	}
-
 }
