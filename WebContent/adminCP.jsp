@@ -12,16 +12,11 @@
 	<style type="text/css">
 	
 	body {
-    	background-image: url('http://i.imgur.com/EX0x72e.jpg');
-    	background-repeat: repeat;
+    	background-image: url('http://i.imgur.com/4K8qUHG.jpg'), url('http://i.imgur.com/EX0x72e.jpg');
+    	background-repeat: no-repeat, repeat;
     	margin: 0;
-	    padding: 0;
-	}
-	.header a {
-    display: block;
-    background-image: url("http://i.imgur.com/4K8qUHG.jpg");
-    background-repeat: no-repeat;
-    padding-top:200px;
+    	padding-top: 200px;
+	    padding-bottom: 100px;
 	}
 	
 	form {
@@ -31,16 +26,16 @@
 	h1 {
 		font-family: 'Verdana', 'Geneva', sans-serif;
 		color: #FFFFFF;
-		margin-left: 400px;	
+		margin-left: 550px;	
 	}
 	h2 {
-		
+		margin-top: 50px;
+		margin-left: 630px;
 		font-family: 'Verdana', 'Geneva', sans-serif;
-		color: #FFFFFF;
+		color: #FF0000;
 	}
 	h4
 	{
-		
 		font-family: 'Verdana', 'Geneva', sans-serif;
 		color: #FFFFFF;
 	}
@@ -48,7 +43,9 @@
 	
 	#sizeT2 {width: 25%;}
 	#userTable{margin-left: 350px;}
-	 
+	#analyt { float: left; margin-right: 100px;}
+	#loginout {float: left;}
+	
 	fileup {
 		color: #FFFFFF;
 	}
@@ -56,7 +53,6 @@
 		color: #FFFFFF;
 		float: left;
 		width: 10em;
-		margin-right: 1em;
 		font-family: 'Verdana', 'Geneva', sans-serif;
 	  	font-size: 15px;
 	}
@@ -65,7 +61,7 @@
 	  color: #666;
 	  font-family: 'Verdana', 'Geneva', sans-serif;
 	  font-size: 25px;
-	  padding: 4px 6px;
+	  padding: 4px 30px;
 	  border: 1px solid #FFFFFF;
 	  margin-bottom:5px;
 	  border-radius: 3px;
@@ -80,12 +76,24 @@
 	  font-size: 18px;
 	  text-decoration: none;
 	  text-transform: uppercase;
+	  margin-bottom: 10px;
+	  margin-top: 5px;
 	}
+	
+	input[type='file'], a.add {
+	  background-color: #0A193A;
+	  color: #FFFFFF;
+	  border: 1px solid #FFFFFF;
+	  border-radius: 5px;
+	  text-transform: uppercase;
+	}
+	
 	
 	input[type='submit']:hover, a.add:hover {
 	  background-color: #1C459E;
 	  cursor: pointer;
-	}
+	}	
+	
 	
 	
 	</style>
@@ -95,33 +103,33 @@
 </head>
 <body>
 
-		<div class="header">
-		    <a href="front.jsp">
-		    </a>
-		</div>
-
+	<h1>Admin Control Panel</h1>
 
 <%
 	User sessionUser = (User)session.getAttribute("userInstance");
 	
 	if (sessionUser == null)
 	{
-		out.println("Access Denied");
+		%><h2>Access Denied</h2> <%
 	} else if (!sessionUser.isAdmin())
 	{
-		out.println("Access Denied");
+		%><h2>Access Denied</h2> <%
 	} else
 	{
 	
 	%>
+
+
+	<form action="front.jsp" method="post">	
+		<input type="submit" value="Return to Search Page" id="loginout"/>
+	</form>
 	
 	
 	
-	<h1>Admin Control Panel</h1>
 	<form action="Analytics.jsp" name="formA" id="formA" method="post">
-		 <input type="submit" value="Analytics Page" />
-	</form><br><br>
-	<br>
+		 <input type="submit" id="analyt" value="Analytics Page" />
+	</form>
+
 	<form action="CreateProduct.jsp" method = "post" enctype="multipart/form-data"> 
 	 <label>Isbn: </label> <input type="text" name="isbn" /> <br>
 	 <label>Title: </label><input type="text" name="Title" /> <br>

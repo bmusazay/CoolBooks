@@ -30,7 +30,7 @@
 	h2 {
 		font-family: 'Verdana', 'Geneva', sans-serif;
 		color: #FF0000;
-		margin-top: 250px;
+		margin-top: 200px;
 		margin-left: 100px;
 	}
 	
@@ -43,6 +43,7 @@
 	a {
     	color: #FFFFFF;
 	}
+	
 	
 	label {
 		color: #FFFFFF;
@@ -91,8 +92,10 @@
 	#ratings {margin: 5px;}
 	#transactions {margin: 5px;}
 	#update {margin: 5px;}
+	#admin { margin: 5px;}
+	#body { width: 500px;}
 	
-	#loginout { float: right; margin-left: 600px; margin-bottom: 200px; margin-right: 75px;}
+	#loginout { float: right; margin-left: 600px; margin-bottom: 150px; margin-right: 75px;}
 
 	
 	</style>
@@ -108,9 +111,10 @@
 	String status = request.getParameter("status");
 	User sessionUser = (User)session.getAttribute("userInstance");
 	if (sessionUser != null) {
+
 		UserDatabase userDB = new UserDatabase();
 		User tempUser = userDB.selectUser(sessionUser.getEmail());%>
-		
+	<div id="body">
 		<h1> Email: <%=tempUser.getEmail()%><h1>
 		<h1> First Name: <%=tempUser.getFName()%><h1>
 		<h1> Last Name: <%=tempUser.getLName()%><h1>
@@ -126,7 +130,13 @@
 	<form action="updateCredentials.jsp" method="post">
 		<input type="submit" value="Update Account" id="update"/>
 	</form>
-	<%} else {
+	<%if (sessionUser.isAdmin()) { %>
+			<form action="adminCP.jsp" method="post">
+				<input type="submit" value="Admin Panel" id="admin"/>
+			</form>
+	 </div><% }
+	
+	} else {
 		response.sendRedirect("loginForm.jsp");
 	}%>
 </body>

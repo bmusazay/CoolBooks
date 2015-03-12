@@ -1,3 +1,14 @@
 /data/
 /purchase/
 /user/
+/adminCP/
+/analytics/
+/book/
+/deleteUser/
+/login/
+/logout/
+/rating/
+/search/
+/signUp/
+/transaction/
+/updateBook/

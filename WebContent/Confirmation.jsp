@@ -15,7 +15,7 @@
 	    padding: 0;
 	}
 	
-	#body {	width: 500px; margin: 300px auto; font-family: 'Verdana', 'Geneva', sans-serif; color: #FFFFFF;}
+	#body {	width: 600px; margin: 200px auto; margin-top: 300px; font-family: 'Verdana', 'Geneva', sans-serif; color: #FFFFFF;}
 	
 	input[type='submit'], a.add {
 	  background-color: #0A193A;
@@ -50,7 +50,7 @@
 		<h1>Order number: <%=tr.getTranNumber()%></h1>
 		<h1>Thank you for your purchase of:</h1>
 		<h2><%=book.getTitle()%><%if (book.getTitle().length() >= 49) { %>...<%} %></h2>
-
+		<h2>Quantity: <%=tr.getQuantity()%>     Total: $<%=tr.getTotal()%></h2>
 
 		<form action="front.jsp" method="post">	
 			<input type="submit" value="Return to shopping" id="return"/>
