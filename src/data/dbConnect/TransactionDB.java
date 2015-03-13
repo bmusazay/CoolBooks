@@ -105,7 +105,6 @@ public class TransactionDB {
 		return orderNumber;
 	}
 	
-
 	public ArrayList<Transaction> getTransactions(String email) {
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -130,6 +129,7 @@ public class TransactionDB {
 					transaction.setTotal(Double.parseDouble(rs.getString(5)));
 					transactions.add(transaction);
 				}
+				
 			}
 		}catch(SQLException e){
 			for(Throwable t: e){	
@@ -153,12 +153,6 @@ public class TransactionDB {
 		    }
 		}
 		return transactions;
-<<<<<<< HEAD
-	
-	}
-
-
-=======
 	}
 	
 	public ArrayList<Transaction> getAllTransactions() {
@@ -224,7 +218,6 @@ public class TransactionDB {
 		 o Other interesting summary data that you will come up with. 
 	 * */
 	 
->>>>>>> mhsaleh2
 	public double getSales(String period)
 	{
 		Boolean previousTotalFlag = false;
@@ -398,9 +391,9 @@ public class TransactionDB {
 			if(conn != null){
 				stmt = conn.createStatement();
 				
-					String strQuery = "select DISTINCT Book.isbn, rating from Book, Transactions " + 
-					"where Book.isbn = Transactions.isbn AND purchaseDate between date_sub( now( ) "
-					+ ", INTERVAL 14 DAY ) and now() order by rating DESC LIMIT 5";
+				String strQuery = "select isbn from (select Transactions.isbn, COUNT(*) " + 
+				"as count FROM Transactions, Book WHERE  Transactions.isbn = Book.isbn GROUP BY " + 
+						"isbn ORDER BY count DESC) AS TopFive ORDER BY count DESC LIMIT 5;";
 				rs = stmt.executeQuery(strQuery);
 				while(rs.next()){
 					popular.add(rs.getString(1));
@@ -446,14 +439,9 @@ public class TransactionDB {
 			if(conn != null){
 				stmt = conn.createStatement();
 				
-				/*String strQuery = "select email, count from (select email, COUNT(*) as count from Transactions,Book where " + 
+				String strQuery = "select email, count from (select email, COUNT(*) as count from Transactions,Book where " + 
 				"Transactions.isbn = Book.isbn AND purchaseDate BETWEEN date_sub( now( ) , INTERVAL 30 DAY ) " + 
 						"AND NOW( ) and category = '" + category + "' ORDER BY count) as customers where count > 2";
-				*/
-				String strQuery = " select email, count from (select email, COUNT(*) as count from Transactions,Book where " +
-				 "Transactions.isbn = Book.isbn AND purchaseDate BETWEEN date_sub( now( ) , INTERVAL 30 DAY ) " +
-				 "AND NOW( ) and Book.category = '" + category + "' GROUP BY email ORDER BY count DESC) as customers " +
-				 "where count > 1";
 				rs = stmt.executeQuery(strQuery);
 				while(rs.next()){
 					String[] values = new String[2];
@@ -485,4 +473,5 @@ public class TransactionDB {
 		}	
 		return customer;
 	}
+	
 }
