@@ -13,10 +13,33 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title></title>
+	<style type="text/css">
+	body {
+		background-image: url('http://i.imgur.com/4K8qUHG.jpg'), url('http://i.imgur.com/EX0x72e.jpg');
+		background-repeat: no-repeat, repeat;
+		margin-left: 350px;
+    	padding: 0;
+	}
+	h1 {
+		font-size: 30px;
+		font-family: 'Verdana', 'Geneva', sans-serif;
+		color: #FFFFFF;
+		margin-top: 250px;
+	}
+	
+	h4
+	{
+		font-size: 15px;
+		font-family: 'Verdana', 'Geneva', sans-serif;
+		color: #FFFFFF;
+	}
+	
+<title>Product Created</title>
 </head>
+
 <body>
 
+	<h1>Product Created</h1>
 <%
 	Double price = 0.0;
 	int year = 0;
@@ -33,7 +56,6 @@
 		// Configure a repository parameter
 		ServletContext context = pageContext.getServletContext();
 		String filePath = context.getInitParameter("file-upload");
-		out.println("Repository of Uploaded Files : "+filePath+"<br/>");
 		
 		// Create a factory for disk-based file items
 		DiskFileItemFactory factory = new DiskFileItemFactory();
@@ -58,7 +80,7 @@
 	           	 
 	            	switch (otherFieldName)
 	            	{
-	            		case "isbn" :
+	            		case "Isbn" :
 	            			isbn = otherFieldValue;
 	            			break;
 	            		case "Title" : 
@@ -80,7 +102,12 @@
 	            			price = Double.parseDouble(otherFieldValue);
 		            		break;
 	            	}
-	            	out.println(otherFieldName+" : "+otherFieldValue+"<br/>");
+	            	%>
+	            	
+	            	<h3><%=otherFieldName %> : <%= otherFieldValue %></h3>
+	            	
+	            	
+	            	<% 
 	            }else{
 	            	// Get the uploaded file parameters
 					
@@ -92,7 +119,7 @@
 					File file = new File(filePath + File.separator + fileName) ;
 	            	fi.write( file ) ;
 	            	if(!fileName.equals("")){
-	            		out.println("<img src='./BookImages/" + fileName + "'/><br>");
+	            		
 	            	}
 	            }
 			}
@@ -105,6 +132,7 @@
 		Book newBook = new Book(isbn, title, author, price, category, year, quantity);
 		BookDatabase bDB = new BookDatabase();
 		bDB.addBook(newBook);
+		response.sendRedirect("adminCP.jsp");
 	}
 %>
 </body>

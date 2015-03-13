@@ -47,6 +47,8 @@ public class Purchase extends HttpServlet {
 		//Book book = (Book)request.getAttribute("book");
 		HttpSession ses = request.getSession();
 		User user = (User)ses.getAttribute("userInstance");
+		int quantity = Integer.parseInt(request.getParameter("quantity"));
+		
 		if (user == null)
 		{
 			//not logged in FIX
@@ -56,8 +58,9 @@ public class Purchase extends HttpServlet {
 		
 		if( book.getInventory() > 0)
 		{
+			System.out.println(quantity);
 			BookDatabase db = new BookDatabase();
-			if (db.purchaseBook(book, 1) > 0) 
+			if (db.purchaseBook(book, quantity) > 0) 
 			{
 				Date dt = new Date();
 				java.text.SimpleDateFormat sdf = 
@@ -66,7 +69,7 @@ public class Purchase extends HttpServlet {
 				
 				//Create transaction
 				Transaction tr = new Transaction(user.getEmail(), book.getIsbn(),
-													1, book.getPrice(), purchaseDate );
+													quantity, book.getPrice(), purchaseDate );
 				
 				//Upload transaction object to TransactionDB
 				TransactionDB trDB = new TransactionDB();

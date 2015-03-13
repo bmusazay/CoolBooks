@@ -153,10 +153,78 @@ public class TransactionDB {
 		    }
 		}
 		return transactions;
+<<<<<<< HEAD
 	
 	}
 
 
+=======
+	}
+	
+	public ArrayList<Transaction> getAllTransactions() {
+		Statement stmt = null;
+		ResultSet rs = null;
+		Connection conn = null;
+		ArrayList<Transaction> transactions = new ArrayList<>();
+		
+		try{
+			conn = connPool.getConnection();
+			
+			if(conn != null){
+				stmt = conn.createStatement();
+				
+				String strQuery = "select orderNumber, purchaseDate, isbn, "
+						        + "quantity, total, email from transactions;";
+				rs = stmt.executeQuery(strQuery);
+				while(rs.next()){
+					Transaction transaction = new Transaction();
+					transaction.setTranNumber(Integer.parseInt(rs.getString(1)));
+					transaction.setTranDate(rs.getString(2));
+					transaction.setIsbn(rs.getString(3));
+					transaction.setQuantity(Integer.parseInt(rs.getString(4)));
+					transaction.setTotal(Double.parseDouble(rs.getString(5)));
+					transaction.setEmail((rs.getString(6)));
+					transactions.add(transaction);
+				}
+				
+			}
+		}catch(SQLException e){
+			for(Throwable t: e){	
+				t.printStackTrace();
+			}
+		} catch (Exception et) {
+			et.printStackTrace();
+		}finally {
+		    try {
+		    	if (rs != null){
+		            rs.close();
+		        }
+		    	if (stmt != null){
+		            stmt.close();
+		        }
+		        if (conn != null) {
+		            connPool.returnConnection(conn);
+		        }
+		    }catch(Exception e){
+		    	 System.err.println(e);
+		    }
+		}
+		return transactions;
+	}
+	
+	/*
+	 * 2
+		o Maintain the aggregate sales and profit of the store weekly and monthly.
+		 Then, compare the value change (i.e. increase/decrease) of sales and profit 
+		 with the previous week and month. 
+		 o Maintain weekly the top 10 bestsellers of the entire store and the top 5
+		  bestsellers of each category. Also main the list of the most favorite books bi-â€�â€�weekly. 
+		 o Develop a direct marketing data; for each product category, a list of customers 
+		 that buy theproduct more than 2 times per month. 
+		 o Other interesting summary data that you will come up with. 
+	 * */
+	 
+>>>>>>> mhsaleh2
 	public double getSales(String period)
 	{
 		Boolean previousTotalFlag = false;
@@ -237,7 +305,7 @@ public class TransactionDB {
 			if(conn != null){
 				stmt = conn.createStatement();
 				
-				String strQuery = "select isbn from (select isbn, COUNT(*) as count FROM" + 
+				String strQuery = "select isbn from (select isbn, COUNT(*) as count FROM " + 
 							"Transactions GROUP BY isbn ORDER BY count DESC) AS TopTen ORDER BY " +
 							"count DESC LIMIT 10;";
 				
@@ -330,8 +398,9 @@ public class TransactionDB {
 			if(conn != null){
 				stmt = conn.createStatement();
 				
-				String strQuery = "select isbn from (select total as biweek from Transactions where purchaseDate BETWEEN " +
-						"date_sub( now( ) , INTERVAL 14 DAY ) AND NOW( )) AS TopFive ORDER BY count DESC LIMIT 5";
+				String strQuery = "select isbn from (select Transactions.isbn, COUNT(*) " + 
+				"as count FROM Transactions, Book WHERE  Transactions.isbn = Book.isbn GROUP BY " + 
+						"isbn ORDER BY count DESC) AS TopFive ORDER BY count DESC LIMIT 5;";
 				rs = stmt.executeQuery(strQuery);
 				while(rs.next()){
 					popular.add(rs.getString(1));
@@ -377,14 +446,14 @@ public class TransactionDB {
 			if(conn != null){
 				stmt = conn.createStatement();
 				
-				String strQuery = "select * from (select email, COUNT(*) as count from Transactions,Book where " + 
+				String strQuery = "select email, count from (select email, COUNT(*) as count from Transactions,Book where " + 
 				"Transactions.isbn = Book.isbn AND purchaseDate BETWEEN date_sub( now( ) , INTERVAL 30 DAY ) " + 
 						"AND NOW( ) and category = '" + category + "' ORDER BY count) as customers where count > 2";
 				rs = stmt.executeQuery(strQuery);
 				while(rs.next()){
 					String[] values = new String[2];
 					values[0] = rs.getString(1);
-					values[1] = Integer.toString(rs.getInt(1));
+					values[1] = Integer.toString(rs.getInt(2));
 					customer.add(values);
 				}
 			}

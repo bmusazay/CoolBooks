@@ -1,33 +1,34 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
 
-<!DOCTYPE html>
 <html>
 <head>
 	<meta charset="UTF-8">
 	<style type="text/css">
 	
 	body {
-	    background-color: #0099FF;
+    	background-image: url('http://i.imgur.com/4K8qUHG.jpg'), url('http://i.imgur.com/EX0x72e.jpg');
+    	background-repeat: no-repeat, repeat;
+    	margin: 0;
+	    padding: 0;
+	    padding-top: 200px;
 	}
 	
 	form {
-	    padding-top: 0px;
-	    padding-right: 400px;
-	    padding-bottom: 25px;
-	    padding-left: 200px;
+	 	width: 450px;	
+		margin: 0 auto;
 	}
 	
 	h1 {
 		font-family: 'Verdana', 'Geneva', sans-serif;
 		color: #FFFFFF;
+	}
+		
+	h2 {
+		font-size: 15px;
+		font-family: 'Verdana', 'Geneva', sans-serif;
+		color: #FF0000;
 	}
 	
 	label {
@@ -51,31 +52,27 @@
 	}
 	
 	input[type='submit'], a.add {
-	  background-color: #0000FF;
-	  color: #f3dad1;
-	  border: none;
+	  background-color: #0A193A;
+	  color: #FFFFFF;
+	  border: 1px solid #FFFFFF;
 	  border-radius: 5px;
-	  padding: 8px 10px;
+	  padding: 8px 30px;
 	  float: left;
-	  margin-top: 10px;
-	  margin-left: 9em;
 	  font-size: 18px;
 	  text-decoration: none;
 	  text-transform: uppercase;
 	}
 	
 	input[type='submit']:hover, a.add:hover {
-	  background-color: #0066FF;
-	  color: #f3dad1;
+	  background-color: #1C459E;
 	  cursor: pointer;
-	  top: 1px;
 	}
 	
 	#link {
 	  color: #FFFFFF;
 	  font-family: 'Verdana', 'Geneva', sans-serifS;
 	  font-size: 15px;
-      margin-left: 5em;
+	  padding-left: 80px;
 	}
 	
 	</style>
@@ -101,12 +98,12 @@
 		
 		<div>
 			<label> Password : </label>
-			<input type = "text"  name="pass" id="pass" required="required"/>
+			<input type = "password"  name="pass" id="pass" required="required"/>
 		</div>
 		
 		<input type="submit" value="Login" id="submit"/>
 		
-		<a href="signUpForm.jsp" id="link"> Register an account </a>
+		<a href="signUpForm.jsp" id="link">Register an account</a>
 	
 	</form>
 </body>

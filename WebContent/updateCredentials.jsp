@@ -3,6 +3,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+
+<%@ page import="user.User" %>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
@@ -82,37 +84,34 @@
 	<title>Insert title here</title>
 </head>
 <body>
-	<form action="SignUp" name="form1" id="form1" method="post">
-		
-		<h1>Create a new account</h1>
+	<form action="UpdateUser" name="form1" id="form1" method="post">
+		<h1>Update Credentials</h1>
 		
 		<%if (session.getAttribute("signup") != null && !(boolean)session.getAttribute("signup")) {
 			session.removeAttribute("signup");%>
 			<h2>This email is already associated with an account. Please select a different email.</h2>
 		<%}%>
-		
-		<div> 
-			<label> Email : </label>
-			<input type="text" name="email" id="email" required="required"/>
-		</div>
-		
+			
 		<div>
 			<label> Password : </label>
-			<input type="password" name="pass" id="pass" required="required"/>
+			<input type="password" name="npass" id="pass" required="required"/>
 		</div>
 		
 		<div> 
 			<label> Confirm Password : </label>
 			<input type="password" name="repass" id="repass" required="required"/>
 		</div>
-			<div> <label> First Name : </label>
+		
+		<div> 
+			<label> First Name : </label>
 			<input type="text" name="fname" id="fname" required="required"/>
 		</div>
-			<div> <label> Last Name : </label>
+		
+		<div> <label> Last Name : </label>
 			<input type="text" name="lname" id="lname" required="required"/>
 		</div>
 		
-		<input type="submit" value="Sign Up" id="submit"/>
+		<input type="submit" value="Update Account" id="submit"/>
 	
 	</form>
 </body>

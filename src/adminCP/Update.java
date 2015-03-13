@@ -1,7 +1,4 @@
-package login;
-
-import user.User;
-import data.dbConnect.*;
+package adminCP;
 
 import java.io.IOException;
 
@@ -10,19 +7,21 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import data.dbConnect.*;
+import user.User;
+import book.Book;
 
 /**
- * Servlet implementation class Login
+ * Servlet implementation class Update
  */
-@WebServlet("/Login")
-public class Login extends HttpServlet {
+@WebServlet("/Update")
+public class Update extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Login() {
+    public Update() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -40,35 +39,27 @@ public class Login extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		
 		String email = request.getParameter("email");
-		String pass = request.getParameter("pass");
+		String book = request.getParameter("isbn");
 		
-		if (email != null && pass != null) {			
-			User user = new User(email, pass, "", "", false);
-			UserDatabase dbConn = new UserDatabase();
-			HttpSession session = request.getSession();
-		
-			if(dbConn.verifyCredentials(user))
+		UserDatabase uDB = new UserDatabase();
+		BookDatabase bDB = new BookDatabase();
+		if (email != null){
+			User u = uDB.selectUser(email);
+			if(u.getFName() == null)
 			{
-				if (dbConn.isAdmin(user.getEmail() ))
-				{
-					user.setAdmin(true);
-					session.setAttribute("success", true);
-					session.setAttribute("userInstance", user);
-					response.sendRedirect("../CoolBooks/adminCP.jsp");
-				} else 
-				{
-					session.setAttribute("login", true);
-					session.setAttribute("userInstance", user);
-					response.sendRedirect("../CoolBooks/front.jsp");
-				}
-
-			} else 
+				email = "notfound";
+			} 
+		}
+		if (book != null){
+			Book b = bDB.getBook(book);
+			if(b.getCategory() == null)
 			{
-				session.setAttribute("login", false);
-				response.sendRedirect("../CoolBooks/loginForm.jsp");
+				book = "notfound";
 			}
 		}
+		
+		response.sendRedirect("../CoolBooks/adminCP.jsp?user=" + email + "&book=" + book);
 	}
+
 }

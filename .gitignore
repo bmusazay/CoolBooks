@@ -1,5 +1,20 @@
 *.DS_Store
 
+<<<<<<< HEAD
+=======
+*.png
+
+.classpath
+
+.settings/org.eclipse.wst.common.project.facet.core.xml
+
+.settings/org.eclipse.wst.common.project.facet.core.xml
+
+*.xml
+
+.classpath
+
+>>>>>>> mhsaleh2
 .classpath
 
 .settings/org.eclipse.wst.common.project.facet.core.xml

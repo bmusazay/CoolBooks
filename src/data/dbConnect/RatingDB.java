@@ -24,7 +24,7 @@ public class RatingDB {
 		return connPool;
 	}
 	
-	public boolean alreadyRated(String email)
+	public boolean alreadyRated(String email, String isbn)
 	{
 		Statement stmt = null;
 		Connection conn = null;
@@ -38,7 +38,7 @@ public class RatingDB {
 			if(conn != null){
 				stmt = conn.createStatement();
 				
-				String strQuery = "select email from ratings where email = '"+ email +"'";
+				String strQuery = "select email from ratings where email = '"+ email +"' and isbn = '"+ isbn +"';";
 				
 				rs = stmt.executeQuery(strQuery);
 				while (rs.next()) {
@@ -201,4 +201,58 @@ public class RatingDB {
 		}
 		return ratings;
 	}
+<<<<<<< HEAD
 }
+=======
+	
+	public ArrayList<Rating> getAllRatings(){
+		Statement stmt = null;
+		ResultSet rs = null;
+		Connection conn = null;
+		ArrayList<Rating> ratings = new ArrayList<>();
+		
+		try{
+			conn = connPool.getConnection();
+			
+			if(conn != null){
+				stmt = conn.createStatement();
+				
+				String strQuery = "select email, rating, "
+								+ "time_reviewed, review from ratings;";
+				
+				rs = stmt.executeQuery(strQuery);
+				while(rs.next()) {
+					Rating rating = new Rating();
+					rating.setEmail(rs.getString(1));
+					rating.setRating(Integer.parseInt(rs.getString(2)));
+					rating.setReveiwDate(rs.getString(3));
+					rating.setReview(rs.getString(4));
+					ratings.add(rating);
+				}
+			}
+		} catch(SQLException e){
+			for(Throwable t: e){	
+				t.printStackTrace();
+			}
+		} catch (Exception et) {
+			et.printStackTrace();
+		}finally {
+		    try {
+		    	if (rs != null){
+		            rs.close();
+		        }
+		    	if (stmt != null){
+		            stmt.close();
+		        }
+		        if (conn != null) {
+		            connPool.returnConnection(conn);
+		        }
+		    }catch(Exception e){
+		    	 System.err.println(e);
+		    }
+		}
+		return ratings;
+	}
+	
+}
+>>>>>>> mhsaleh2
