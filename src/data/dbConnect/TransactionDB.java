@@ -105,6 +105,7 @@ public class TransactionDB {
 		return orderNumber;
 	}
 	
+
 	public ArrayList<Transaction> getTransactions(String email) {
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -129,7 +130,6 @@ public class TransactionDB {
 					transaction.setTotal(Double.parseDouble(rs.getString(5)));
 					transactions.add(transaction);
 				}
-				
 			}
 		}catch(SQLException e){
 			for(Throwable t: e){	
@@ -153,6 +153,12 @@ public class TransactionDB {
 		    }
 		}
 		return transactions;
+<<<<<<< HEAD
+	
+	}
+
+
+=======
 	}
 	
 	public ArrayList<Transaction> getAllTransactions() {
@@ -218,6 +224,7 @@ public class TransactionDB {
 		 o Other interesting summary data that you will come up with. 
 	 * */
 	 
+>>>>>>> mhsaleh2
 	public double getSales(String period)
 	{
 		Boolean previousTotalFlag = false;
@@ -478,5 +485,4 @@ public class TransactionDB {
 		}	
 		return customer;
 	}
-	
 }
