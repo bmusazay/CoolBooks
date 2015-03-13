@@ -102,7 +102,7 @@
 	}
 	
 	#search { position: absolute; right: 20px; right: 350px; top: 200px; }
-	
+	#rank { width : 10%; font-size:30px;}
 	#category {
 	  display: inline-block;
       vertical-align: top;
@@ -187,6 +187,7 @@
 		Book book = bDB.getBook(topTen.get(i));
 		%>
 		<tr>
+				<td id="rank"><%=i+1 %></td>
 				<td id="bookPic"><a href="Product.jsp?isbn=<%=book.getIsbn()%>">
 				<img id="image" src='./BookImages/<%=book.getIsbn() %>.png'/><br></a></td>
 				<td><%=book.getTitle()%></td>
@@ -199,7 +200,7 @@
 	<% 
 	out.println("<br><br><br>");
 	
-	out.println("<br><h3>Top 5 Most Popular (biweekly): </h3><br>");
+	out.println("<br><h3>Top 5 Highest Rated (biweekly): </h3><br>");
 	ArrayList<String> topFive = trDB.biweeklyPopular();
 	%>
 	
@@ -211,6 +212,7 @@
 		Book book = bDB.getBook(topFive.get(i));
 		%>
 		<tr>
+				<td id="rank"><%=i+1 %></td>
 				<td id="bookPic"><a href="Product.jsp?isbn=<%=book.getIsbn()%>">
 				<img id="image" src='./BookImages/<%=book.getIsbn() %>.png'/><br></a></td>
 				<td><%=book.getTitle()%></td>
@@ -266,7 +268,8 @@
 			
 			Book book = bDB.getBook(isbnTopFive.get(i));	
 		%>
-				<tr>	
+				<tr>
+				<td id="rank"><%=i+1 %></td>	
 				<td id="bookPic"><a href="Product.jsp?isbn=<%=book.getIsbn()%>">
 				<img id="image" src='./BookImages/<%=book.getIsbn() %>.png'/><br></a></td>
 				<td><%=book.getTitle()%></td>

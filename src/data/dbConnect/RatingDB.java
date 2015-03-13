@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 import data.dbConnect.DBConnectionPool;
 import rating.Rating;
-import transaction.Transaction;
 
 public class RatingDB {
 	final static String db_url = "jdbc:mysql://localhost:3306/CoolBooksDB";
@@ -119,7 +118,6 @@ public class RatingDB {
 								+ "time_reviewed, review from ratings where email = '" + email + "';";
 				
 				rs = stmt.executeQuery(strQuery);
-
 				while(rs.next()) {
 					Rating rating = new Rating();
 					rating.setIsbn(rs.getString(1));
@@ -201,9 +199,6 @@ public class RatingDB {
 		}
 		return ratings;
 	}
-<<<<<<< HEAD
-}
-=======
 	
 	public ArrayList<Rating> getAllRatings(){
 		Statement stmt = null;
@@ -255,4 +250,3 @@ public class RatingDB {
 	}
 	
 }
->>>>>>> mhsaleh2
