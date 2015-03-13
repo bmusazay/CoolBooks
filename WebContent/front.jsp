@@ -27,8 +27,8 @@
 	h2 {
 		font-family: 'Verdana', 'Geneva', sans-serif;
 		color: #FF0000;
-		margin-top: 250px;
-		margin-left: 100px;
+		margin-top: 350px;
+		margin-left: 200px;
 	}
 	
 	h4 {
